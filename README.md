@@ -15,7 +15,7 @@ I decided to take the opportunity and learn a new language solving these puzzles
 | 3            |           | Medium         | Python       |
 | 4            | ⭐⭐     | Very easy      | Python       |
 | 5            |           |                |              |
-| 6            |           |                |              |
+| 6            | ⭐⭐     | Easy           | Python       |
 | 7            |           |                |              |
 | 8            |           |                |              |
 | 9            |           |                |              |
