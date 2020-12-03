@@ -1,1 +1,6 @@
 test.py
+
+project/
+.idea/
+.bsp/
+target/
