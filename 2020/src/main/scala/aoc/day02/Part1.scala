@@ -1,6 +1,6 @@
 package aoc.day02
 
-import aoc.{CommonHelper, Solution}
+import aoc.Solution
 
 case class Part1(inputPath : String) extends Solution(inputPath) {
 
@@ -22,7 +22,6 @@ case class Part1(inputPath : String) extends Solution(inputPath) {
 
   private def ruleIsOk(min: Int, max: Int, param: Char, password: String): Boolean = {
     val count = password.count(_ == param)
-    println("testsadf")
     count >= min && count <= max
   }
 
