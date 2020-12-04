@@ -7,7 +7,7 @@ object CommonHelper {
     Source.fromURL(getClass.getResource(path))
   }
 
-  def getInputLines(path: String): Iterator[String] = {
-    getInputFile(path).getLines()
+  def getInputLines(bufferedSource: BufferedSource): Iterator[String] = {
+    bufferedSource.getLines()
   }
 }
