@@ -13,7 +13,7 @@ This year I decided to practice a language I've been learning this semester in s
 | 2            | ⭐⭐        | 
 | 3            | ⭐⭐        |
 | 4            | ⭐⭐        | 
-| 5            |           |
+| 5            | ⭐⭐        |
 | 6            |           |
 | 7            |           |
 | 8            |           |
