@@ -74,9 +74,6 @@ object Bag {
 }
 
 case class Part1(inputPath : String) extends Solution(inputPath) {
-  def printBags(bags: Seq[Bag]): Unit = {
-    bags.foreach(bag => println(bag))
-  }
   override def solve(): Int = {
     val bags = Bag(lines)
     bags.count(bag => bag.canContain("shiny gold"))
