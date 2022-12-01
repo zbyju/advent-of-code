@@ -6,12 +6,16 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/elliotchance/orderedmap/v2"
 )
 
-var solvers = map[string]func(){
-	"00-0": day00.Hello,
-	"01-0": day01.Part1,
-	"01-1": day01.Part2,
+var solvers = orderedmap.NewOrderedMap[string, func()]()
+
+func initSolvers() {
+	solvers.Set("00-0", day00.Hello)
+	solvers.Set("01-1", day01.Part1)
+	solvers.Set("01-2", day01.Part2)
 }
 
 func printHeading(text string) {
@@ -29,17 +33,19 @@ func printHeading2(text string) {
 
 func run(day, part string) {
 	printHeading2("Running day #" + day + " - part " + part)
-	solvers[day+"-"+part]()
+	solver, _ := solvers.Get(day + "-" + part)
+	solver()
 	fmt.Println()
 }
 
 func main() {
+	initSolvers()
 
 	if len(os.Args) == 1 {
 		printHeading("Running all days and all parts")
 
-		for i := range solvers {
-			split := strings.Split(i, "-")
+		for _, v := range solvers.Keys() {
+			split := strings.Split(v, "-")
 			run(split[0], split[1])
 		}
 	}
