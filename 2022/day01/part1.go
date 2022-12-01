@@ -29,6 +29,6 @@ func Solve1(input string) int {
 func Part1() {
 	name := "Day #01 - part 1"
 
-	common.TestOutput(name+" - input 1", 24000, Solve1(input1))
+	common.TestOutput(name+" - input 1", 24000, Solve1(Input1))
 	common.PrintOutput(name, Solve1(common.Readfile("./day01/input.txt")))
 }

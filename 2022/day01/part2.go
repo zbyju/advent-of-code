@@ -7,21 +7,6 @@ import (
 	"strings"
 )
 
-const input1 = `1000
-2000
-3000
-
-4000
-
-5000
-6000
-
-7000
-8000
-9000
-
-10000`
-
 func Solve2(input string) int {
 	lines := strings.Split(input, "\n")
 
@@ -48,6 +33,6 @@ func Solve2(input string) int {
 func Part2() {
 	name := "Day #01 - part 2"
 
-	common.TestOutput(name+" - input 1", 45000, Solve2(input1))
+	common.TestOutput(name+" - input 1", 45000, Solve2(Input1))
 	common.PrintOutput(name, Solve2(common.Readfile("./day01/input.txt")))
 }
