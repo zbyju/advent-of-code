@@ -1,8 +1,7 @@
 package day01
 
 import (
-	"log"
-	"os"
+	"aoc/common"
 	"strconv"
 	"strings"
 )
@@ -28,15 +27,8 @@ func Solve1(input string) int {
 }
 
 func Part1() {
-	output1 := Solve1(input1)
-	if output1 != 24000 {
-		log.Fatalf("Input 1 should be 24000 but is: %d", output1)
-	} else {
-		log.Printf("Input 1 is ok: %d", output1)
-	}
+	name := "Day #01 - part 1"
 
-	buf, _ := os.ReadFile("./day01/input.txt")
-	input := string(buf)
-	output := Solve1(input)
-	log.Printf("Part 1 output is: %d", output)
+	common.TestOutput(name+" - input 1", 24000, Solve1(input1))
+	common.PrintOutput(name, Solve1(common.Readfile("./day01/input.txt")))
 }

@@ -1,4 +1,4 @@
-package aocio
+package common
 
 import (
 	"log"
@@ -19,5 +19,5 @@ func TestOutput(name string, expected, real int) {
 }
 
 func PrintOutput(name string, real int) {
-	log.Printf("%s output is: %d", name, real)
+	log.Printf("%s - output is: %d", name, real)
 }

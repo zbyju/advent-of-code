@@ -1,8 +1,7 @@
 package day01
 
 import (
-	"log"
-	"os"
+	"aoc/common"
 	"sort"
 	"strconv"
 	"strings"
@@ -47,8 +46,8 @@ func Solve2(input string) int {
 }
 
 func Part2() {
-	buf, _ := os.ReadFile("./day01/input.txt")
-	input := string(buf)
-	output := Solve2(input)
-	log.Printf("Part 2 output is: %d", output)
+	name := "Day #01 - part 2"
+
+	common.TestOutput(name+" - input 1", 45000, Solve2(input1))
+	common.PrintOutput(name, Solve2(common.Readfile("./day01/input.txt")))
 }
