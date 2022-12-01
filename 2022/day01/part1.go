@@ -1,4 +1,4 @@
-package main
+package day01
 
 import (
 	"log"
@@ -7,22 +7,7 @@ import (
 	"strings"
 )
 
-const input1 = `1000
-2000
-3000
-
-4000
-
-5000
-6000
-
-7000
-8000
-9000
-
-10000`
-
-func solve(input string) int {
+func Solve1(input string) int {
 	lines := strings.Split(input, "\n")
 
 	elf := 0
@@ -42,16 +27,16 @@ func solve(input string) int {
 	return max
 }
 
-func main() {
-	output1 := solve(input1)
+func Part1() {
+	output1 := Solve1(input1)
 	if output1 != 24000 {
 		log.Fatalf("Input 1 should be 24000 but is: %d", output1)
 	} else {
 		log.Printf("Input 1 is ok: %d", output1)
 	}
 
-	buf, _ := os.ReadFile("input.txt")
+	buf, _ := os.ReadFile("./day01/input.txt")
 	input := string(buf)
-	output := solve(input)
+	output := Solve1(input)
 	log.Printf("Part 1 output is: %d", output)
 }

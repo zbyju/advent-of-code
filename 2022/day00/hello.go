@@ -1,7 +1,7 @@
-package main
+package day00
 
 import "fmt"
 
-func main() {
+func Hello() {
 	fmt.Println("Hello, World!")
 }

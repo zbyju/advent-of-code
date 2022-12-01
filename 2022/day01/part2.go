@@ -1,4 +1,4 @@
-package main
+package day01
 
 import (
 	"log"
@@ -23,7 +23,7 @@ const input1 = `1000
 
 10000`
 
-func solve(input string) int {
+func Solve2(input string) int {
 	lines := strings.Split(input, "\n")
 
 	elf := 0
@@ -46,16 +46,9 @@ func solve(input string) int {
 	return elfs[0] + elfs[1] + elfs[2]
 }
 
-func main() {
-	output1 := solve(input1)
-	if output1 != 45000 {
-		log.Fatalf("Input 1 should be 45000 but is: %d", output1)
-	} else {
-		log.Printf("Input 1 is ok: %d", output1)
-	}
-
-	buf, _ := os.ReadFile("input.txt")
+func Part2() {
+	buf, _ := os.ReadFile("./day01/input.txt")
 	input := string(buf)
-	output := solve(input)
-	log.Printf("Part 1 output is: %d", output)
+	output := Solve2(input)
+	log.Printf("Part 2 output is: %d", output)
 }
