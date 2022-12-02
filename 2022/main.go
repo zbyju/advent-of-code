@@ -3,6 +3,7 @@ package main
 import (
 	"aoc/day00"
 	"aoc/day01"
+	"aoc/day02"
 	"fmt"
 	"log"
 	"os"
@@ -40,6 +41,8 @@ func initSolvers() {
 	solvers.Set("00-1", day00.Hello)
 	solvers.Set("01-1", day01.Part1)
 	solvers.Set("01-2", day01.Part2)
+	solvers.Set("02-1", day02.Part1)
+	solvers.Set("02-2", day02.Part2)
 }
 
 func printHeading(text string) {
