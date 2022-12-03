@@ -5,11 +5,10 @@ I will post all of my solutions for the advent of code event here.
 Link to the contest: https://adventofcode.com/
 
 - [2019](/2019/) - Python
-- [2020](/2020/) - Scala
-- [2021](/2021/)
+- [2020](/2020/src/main/scala/aoc/) - Scala
 - [2022](/2022/) - Go
 
-| **Day**      | [2019](/2019/) **Stars** | [2020](/2020/) **Stars** | 2021 **Stars** | [2022](/2022/) **Stars** |
+| **Day**      | [2019](/2019/) **Stars** | [2020](/2020/src/main/scala/aoc/) **Stars** | 2021 **Stars** | [2022](/2022/) **Stars** |
 |:------------:|:--------------:|:--------------:|:--------------:|:--------------:|
 | 1            | ⭐⭐            |⭐⭐             |                |⭐⭐             |
 | 2            | ⭐⭐            |⭐⭐             |                |⭐⭐             |
