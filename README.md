@@ -5,7 +5,8 @@ I will post all of my solutions for the advent of code event here.
 Link to the contest: https://adventofcode.com/
 
 - [2019](/2019/) - Python
-- [2020](/2020/src/main/scala/aoc/) - Scala
+- [2020](/2020/src/main/scala/aoc/) - Scala 2
+- 2021 - Scala 3
 - [2022](/2022/) - Go
 
 | **Day** | [2019](/2019/) **Stars** | [2020](/2020/src/main/scala/aoc/) **Stars** | 2021 **Stars** | [2022](/2022/) **Stars** |
@@ -47,3 +48,13 @@ This year I decided to practice a language I've been learning in school this sem
 ## Year 2019
 
 I decided to take the opportunity and learn a new language (Python) while solving these puzzles.
+
+# Languages for consideration
+
+- **Rust**
+- **Elixir**
+- Kotlin
+- Swift
+- Haskell
+- TypeScript
+- C++
