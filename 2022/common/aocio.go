@@ -18,6 +18,18 @@ func TestOutput(name string, expected, real int) {
 	}
 }
 
+func TestOutputStr(name string, expected, real string) {
+	if real != expected {
+		log.Fatalf("%s should be %s but is %s", name, expected, real)
+	} else {
+		log.Printf("%s is ok: %s", name, real)
+	}
+}
+
 func PrintOutput(name string, real int) {
 	log.Printf("%s - output is: %d", name, real)
+}
+
+func PrintOutputStr(name string, real string) {
+	log.Printf("%s - output is: %s", name, real)
 }
