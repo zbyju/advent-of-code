@@ -2,23 +2,26 @@ package aoc.day10
 
 import aoc.Solution
 
-import scala.language.implicitConversions
-import scala.collection.immutable.Queue
-import scala.util.Try
+import scala.collection.mutable.HashMap
 
 case class Part2(inputPath: String) extends Solution(inputPath) {
-  def countPossibilities(adapters: Seq[Int]): Int = {
+  val memo = HashMap[Seq[Int], Long]()
+
+  def countPossibilities(adapters: Seq[Int]): Long = {
     if (adapters.isEmpty) return 0
+    if (adapters.length == 1) return 1
+    val memorized = memo.get(adapters)
+    if (memorized.isDefined) return memorized.get
     val next = adapters.filter(x => x > adapters.head && x <= adapters.head + 3)
-    val nextPossibilities = countPossibilities(
-      adapters.tail.filter(x => !next.contains(x))
-    )
-    return next.length + nextPossibilities
+    val res =
+      next.map(n => countPossibilities(adapters.filter(a => a >= n))).sum
+    memo(adapters) = res
+    res
   }
   override def solve(): Long = {
     val adapters = lines.map(_.toInt)
     val max = adapters.max
-    countPossibilities(adapters.prepended(0).appended(max).sorted)
+    countPossibilities(adapters.prepended(0).appended(max + 3).sorted)
   }
 }
 
