@@ -26,14 +26,11 @@ func isUnique(window []rune) bool {
 
 func Solve1(input string, length int) int {
 	window := initSlidingWindow(input, length)
-	if isUnique(window) {
-		return length
-	}
 	for i, v := range input[length:] {
-		window[i%length] = v
 		if isUnique(window) {
-			return i + length + 1
+			return i + length
 		}
+		window[i%length] = v
 	}
 	return len(input)
 }
