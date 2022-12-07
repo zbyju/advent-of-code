@@ -7,9 +7,9 @@ import scala.language.implicitConversions
 case class Rule(bag: Bag, count: Int) {
   override def equals(that: Any): Boolean = {
     that match {
-      case that: Rule => this.bag == that.bag
+      case that: Rule   => this.bag == that.bag
       case that: String => this.bag == that
-      case _ => false
+      case _            => false
     }
   }
 }
@@ -19,9 +19,9 @@ case class Bag(name: String) {
 
   override def equals(that: Any): Boolean = {
     that match {
-      case that: Bag => this.name == that.name
+      case that: Bag    => this.name == that.name
       case that: String => this.name == that
-      case _ => false
+      case _            => false
     }
   }
 
@@ -33,9 +33,12 @@ case class Bag(name: String) {
 
   def hasToContain: Int = {
     if (rules.isEmpty) 0
-    else this.rules.map(rule => {
-      rule.count + rule.count * rule.bag.hasToContain
-    }).sum
+    else
+      this.rules
+        .map(rule => {
+          rule.count + rule.count * rule.bag.hasToContain
+        })
+        .sum
   }
 
   def addRule(rule: Rule): Unit = {
@@ -47,14 +50,19 @@ case class Bag(name: String) {
 
 object Bag {
   // Take Bag and Rules and add them to the bag
-  def addRulesToBags(bagAndRules: (Bag, String), bags: Seq[(Bag, String)]): Bag = {
+  def addRulesToBags(
+      bagAndRules: (Bag, String),
+      bags: Seq[(Bag, String)]
+  ): Bag = {
     val pattern = "^(\\d+) ([\\w ?]+) (bag|bags)$".r
-    val rules: Seq[Rule] = bagAndRules._2.split(", ").map(rule => {
-      if(rule.trim == "no other bags") return bagAndRules._1
-      val pattern(count, name, _) = rule.trim
-      val ruleBag: Bag = bags.find(bag => bag._1.name == name).get._1
-      Rule(ruleBag, count.toInt)
-    })
+    val rules: Seq[Rule] = bagAndRules._2
+      .split(", ")
+      .map(rule => {
+        if (rule.trim == "no other bags") return bagAndRules._1
+        val pattern(count, name, _) = rule.trim
+        val ruleBag: Bag = bags.find(bag => bag._1.name == name).get._1
+        Rule(ruleBag, count.toInt)
+      })
     rules.foreach(rule => bagAndRules._1.addRule(rule))
     bagAndRules._1
   }
@@ -73,7 +81,7 @@ object Bag {
   }
 }
 
-case class Part1(inputPath : String) extends Solution(inputPath) {
+case class Part1(inputPath: String) extends Solution(inputPath) {
   override def solve(): Int = {
     val bags = Bag(lines)
     bags.count(bag => bag.canContain("shiny gold"))
@@ -84,6 +92,6 @@ object Part1 {
   def main(args: Array[String]): Unit = {
     val sol = Part1("/day07/part1.txt")
     val result = sol.solve()
-    println(s"The result is: $result")
+    println(s"Day 07 - Part 1 - result: $result")
   }
 }

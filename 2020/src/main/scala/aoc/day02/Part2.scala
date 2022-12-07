@@ -2,7 +2,7 @@ package aoc.day02
 
 import aoc.Solution
 
-case class Part2(inputPath : String) extends Solution(inputPath) {
+case class Part2(inputPath: String) extends Solution(inputPath) {
 
   private def parsePassword(str: String): (Int, Int, Char, String) = {
     var tmp = str.split('-')
@@ -20,15 +20,20 @@ case class Part2(inputPath : String) extends Solution(inputPath) {
     (index1 - 1, index2 - 1, param(0), password)
   }
 
-  private def ruleIsOk(index1: Int, index2: Int, param: Char, password: String): Boolean = {
+  private def ruleIsOk(
+      index1: Int,
+      index2: Int,
+      param: Char,
+      password: String
+  ): Boolean = {
     password(index1) == param ^ password(index2) == param
   }
 
   override def solve(): Int = {
     var result = 0
-    for(passwordEntry <- lines) {
+    for (passwordEntry <- lines) {
       val (min, max, param, password) = parsePassword(passwordEntry)
-      if(ruleIsOk(min, max, param, password)) result += 1
+      if (ruleIsOk(min, max, param, password)) result += 1
     }
     result
   }
@@ -38,8 +43,6 @@ object Part2 {
   def main(args: Array[String]): Unit = {
     val sol = Part2("/day02/part2.txt")
     val result = sol.solve()
-    println(s"The result is: $result")
+    println(s"Day 02 - Part 2 - result: $result")
   }
 }
-
-

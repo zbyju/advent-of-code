@@ -18,7 +18,7 @@ object Part2 {
   def main(args: Array[String]): Unit = {
     val sol = Part2("/day11/part1.txt")
     val result = sol.solve()
-    println(s"The result is: $result")
+    println(s"Day 11 - Part 2 - result: $result")
   }
 
   def walkDir(plan: Plan, coords: Coords, dir: (Int, Int)): Option[Char] = {

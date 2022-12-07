@@ -18,6 +18,6 @@ object Part1 {
   def main(args: Array[String]): Unit = {
     val sol = Part1("/day01/part1.txt")
     val result = sol.solve()
-    println(s"The result is: $result")
+    println(s"Day 01 - Part 1 - result: $result")
   }
 }

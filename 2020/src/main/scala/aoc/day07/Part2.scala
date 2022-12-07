@@ -4,7 +4,7 @@ import aoc.Solution
 
 import scala.language.implicitConversions
 
-case class Part2(inputPath : String) extends Solution(inputPath) {
+case class Part2(inputPath: String) extends Solution(inputPath) {
   def printBags(bags: Seq[Bag]): Unit = {
     bags.foreach(bag => println(bag))
   }
@@ -19,6 +19,6 @@ object Part2 {
   def main(args: Array[String]): Unit = {
     val sol = Part2("/day07/part1.txt")
     val result = sol.solve()
-    println(s"The result is: $result")
+    println(s"Day 07 - Part 2 - result: $result")
   }
 }

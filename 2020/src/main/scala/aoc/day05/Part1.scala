@@ -2,14 +2,14 @@ package aoc.day05
 
 import aoc.Solution
 
-case class Part1(inputPath : String) extends Solution(inputPath) {
+case class Part1(inputPath: String) extends Solution(inputPath) {
   private def calcSeatID(row: Int, col: Int): Int = row * 8 + col
 
   def getSeatID(line: String): Int = {
     var row = Range(0, 127)
     var col = Range(0, 7)
 
-    for(c <- line) {
+    for (c <- line) {
       c match {
         case 'F' => row = row.lowerHalf()
         case 'B' => row = row.upperHalf()
@@ -24,7 +24,7 @@ case class Part1(inputPath : String) extends Solution(inputPath) {
     var max = 0
     for (line <- lines) {
       val tmp = getSeatID(line)
-      if(tmp > max) max = tmp
+      if (tmp > max) max = tmp
     }
     max
   }
@@ -34,6 +34,6 @@ object Part1 {
   def main(args: Array[String]): Unit = {
     val sol = Part1("/day05/part1.txt")
     val result = sol.solve()
-    println(s"The result is: $result")
+    println(s"Day 06 - Part 1 - result: $result")
   }
 }
