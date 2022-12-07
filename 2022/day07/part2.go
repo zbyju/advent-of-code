@@ -23,8 +23,6 @@ func findDirToDelete(dir Dir, spaceToFree int, freedSpace *int) (size int) {
 func Solve2(input string) int {
 	root := parseInput(strings.Split(input, "\n"))
 
-	printDir(root, "/", 0)
-
 	totalSpace := 70_000_000
 	neededSpace := 30_000_000
 	usedSpace := sumDirSizes(root, 0, nil)

@@ -2,7 +2,6 @@ package day07
 
 import (
 	"aoc/common"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -80,20 +79,6 @@ func parseInput(lines []string) Dir {
 	return *fs.root
 }
 
-func printDir(dir Dir, name string, indent int) {
-	padding := ""
-	for i := 0; i < indent; i++ {
-		padding += " "
-	}
-	fmt.Printf("%sDir - %s\n", padding, name)
-	for filename, file := range dir.files {
-		fmt.Printf("%s File - %s - size: %d\n", padding, filename, file.size)
-	}
-	for dirname, dir := range dir.dirs {
-		printDir(dir, dirname, indent+2)
-	}
-}
-
 func sumDirSizes(dir Dir, maxSize int, sum *int64) (size int) {
 	for _, v := range dir.files {
 		size += v.size
@@ -112,7 +97,6 @@ func sumDirSizes(dir Dir, maxSize int, sum *int64) (size int) {
 func Solve1(input string) (sum int64) {
 	root := parseInput(strings.Split(input, "\n"))
 
-	printDir(root, "/", 0)
 	sumDirSizes(root, 100_000, &sum)
 
 	return sum
