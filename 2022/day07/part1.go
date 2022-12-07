@@ -103,7 +103,7 @@ func Solve1(input string) (sum int64) {
 }
 
 func Part1() {
-	name := "Day #06 - part 1"
+	name := "Day #07 - part 1"
 
 	common.TestOutputBig(name+" - input 1", 95437, Solve1(Input1))
 	common.PrintOutputBig(name, Solve1(common.Readfile("./day07/input.txt")))
