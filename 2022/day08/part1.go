@@ -2,14 +2,13 @@ package day08
 
 import (
 	"aoc/common"
-	"fmt"
 	"strconv"
 	"strings"
 )
 
 type Coords struct {
-	x int
-	y int
+	row int
+	col int
 }
 
 func parseInput(input string) [][]int {
@@ -25,53 +24,48 @@ func parseInput(input string) [][]int {
 	return trees
 }
 
-func isVisibleRow(trees [][]int, position Coords) bool {
+func isVisibleRow(trees [][]int, p Coords) bool {
 	left, right := true, true
-	t := trees[position.x][position.y]
-	for j, tree := range trees[position.x] {
-		fmt.Println("Checking row")
+	t := trees[p.row][p.col]
+	for j, tree := range trees[p.row] {
 		if tree >= t {
-			if j < position.y {
+			if j < p.col {
 				left = false
-			} else if j > position.y {
+			} else if j > p.col {
 				right = false
 			}
 		}
 	}
-	fmt.Println("Left, right:", left, right)
 	return left || right
 }
 
-func isVisibleCol(trees [][]int, position Coords) bool {
+func isVisibleCol(trees [][]int, p Coords) bool {
 	up, down := true, true
-	t := trees[position.x][position.y]
+	t := trees[p.row][p.col]
 	for i, row := range trees {
-		tree := row[i]
+		tree := row[p.col]
 		if tree >= t {
-			if i < position.x {
-				down = false
-			} else if i > position.x {
+			if i < p.row {
 				up = false
+			} else if i > p.row {
+				down = false
 			}
 		}
 	}
-	fmt.Println("Down, up:", down, up)
 	return down || up
 }
 
-func isVisible(trees [][]int, position Coords) bool {
-	if position.x == 0 || position.x == len(trees) || position.y == 0 || position.y == len(trees[position.x]) {
+func isVisible(trees [][]int, p Coords) bool {
+	if p.row == 0 || p.row == len(trees)-1 || p.col == 0 || p.col == len(trees[0])-1 {
 		return true
 	}
-	return isVisibleRow(trees, position) || isVisibleCol(trees, position)
+	return isVisibleRow(trees, p) || isVisibleCol(trees, p)
 }
 
 func Solve1(input string) (count int64) {
 	trees := parseInput(input)
-
 	for i := range trees {
-		for j := range trees {
-			fmt.Println(i, j, trees[i][j], isVisible(trees, Coords{i, j}))
+		for j := range trees[i] {
 			if isVisible(trees, Coords{i, j}) {
 				count++
 			}
