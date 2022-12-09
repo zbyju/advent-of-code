@@ -2,7 +2,6 @@ package day09
 
 import (
 	"aoc/common"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -30,7 +29,6 @@ func iterate2(lines []string) (count int) {
 	visited[Coords{0, 0}] = true
 	count = 1
 	for _, line := range lines {
-		fmt.Println("Going through: ", line)
 		split := strings.Split(line, " ")
 		amount, _ := strconv.Atoi(split[1])
 
@@ -72,5 +70,6 @@ func Part2() {
 	name := "Day #09 - part 2"
 
 	common.TestOutput(name+" - input 1", 1, Solve2(Input1))
+	common.TestOutput(name+" - input 2", 36, Solve2(Input2))
 	common.PrintOutput(name, Solve2(common.Readfile("./day09/input.txt")))
 }
