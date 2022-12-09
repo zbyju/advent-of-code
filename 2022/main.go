@@ -16,6 +16,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/elliotchance/orderedmap/v2"
 )
@@ -42,6 +43,18 @@ func dayToTwoDigit(day string) string {
 	} else {
 		return day
 	}
+}
+
+func measureTime(solver func()) int64 {
+	start := time.Now()
+
+	solver()
+
+	elapsed := time.Since(start)
+
+	fmt.Printf("Elapsed time: %s", elapsed)
+
+	return elapsed.Nanoseconds()
 }
 
 func initSolvers() {
@@ -79,16 +92,23 @@ func printHeading2(text string) {
 	fmt.Println(strings.Repeat("-", len(text)))
 }
 
-func run(day, part string) {
+func printTime(t int64) {
+	fmt.Println()
+	fmt.Printf("Total time to run: %s\n", time.Duration(t))
+	fmt.Println()
+}
+
+func run(day, part string) int64 {
 	printHeading2("Running day #" + day + " - part " + part)
 	solver, ok := solvers.Get(day + "-" + part)
 
-	if ok == false {
+	if !ok {
 		log.Fatalf("The combination of %s - %s does not exist", day, part)
 	}
 
-	solver()
+	t := measureTime(solver)
 	fmt.Println()
+	return t
 }
 
 /*
@@ -104,10 +124,14 @@ func main() {
 	if len(os.Args) == 1 {
 		printHeading("Running all days and all parts")
 
+		var totalTime int64 = 0
 		for _, v := range solvers.Keys() {
 			split := strings.Split(v, "-")
-			run(split[0], split[1])
+			t := run(split[0], split[1])
+			totalTime += t
 		}
+
+		printTime(totalTime)
 	}
 
 	// Run the selected day
@@ -119,10 +143,12 @@ func main() {
 		paddedDay := dayToTwoDigit(day)
 
 		if paddedDay == "00" {
-			run("00", "1")
+			t := run("00", "1")
+			printTime(t)
 		} else {
-			run(paddedDay, "1")
-			run(paddedDay, "2")
+			t1 := run(paddedDay, "1")
+			t2 := run(paddedDay, "2")
+			printTime(t1 + t2)
 		}
 	}
 
@@ -138,6 +164,7 @@ func main() {
 		}
 
 		paddedDay := dayToTwoDigit(day)
-		run(paddedDay, part)
+		t := run(paddedDay, part)
+		printTime(t)
 	}
 }
