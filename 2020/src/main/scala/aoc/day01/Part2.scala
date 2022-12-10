@@ -1,17 +1,24 @@
 package aoc.day01
 
 import aoc.{CommonHelper, Solution}
+import scala.collection.Searching
 
 case class Part2(inputPath: String) extends Solution(inputPath) {
   override def solve(): Int = {
-    val results = for {
-      x <- lines
-      y <- lines
-      z <- lines if x.toInt + y.toInt + z.toInt == 2020
-    } yield (x, y, z)
+    val expenses = lines.map(_.toInt).sorted
 
-    val result = results(0)
-    result._1.toInt * result._2.toInt * result._3.toInt
+    for (i <- 0 until expenses.length - 2) {
+      for (j <- i + 1 until expenses.length - 1) {
+        val searchSpace = expenses.slice(j + 1, expenses.length)
+        val searchingFor = 2020 - (expenses(i) + expenses(j))
+        searchSpace.search(searchingFor) match {
+          case Searching.Found(k) =>
+            return expenses(i) * expenses(j) * searchSpace(k)
+          case _ =>
+        }
+      }
+    }
+    return -1
   }
 }
 
