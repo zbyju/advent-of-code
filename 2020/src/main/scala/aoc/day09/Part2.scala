@@ -5,6 +5,7 @@ import aoc.Solution
 import scala.language.implicitConversions
 import scala.collection.immutable.Queue
 import scala.util.Try
+import aoc.CommonHelper
 
 case class Part2(inputPath: String, preambuleLength: Int)
     extends Solution(inputPath) {
@@ -54,9 +55,13 @@ case class Part2(inputPath: String, preambuleLength: Int)
 }
 
 object Part2 {
-  def main(args: Array[String]): Unit = {
+  def run(): Double = {
+    val from = System.nanoTime()
     val sol = Part2("/day09/part1.txt", 25)
     val result = sol.solve()
     println(s"Day 09 - Part 2 - result: $result")
+    val to = System.nanoTime()
+    CommonHelper.nanoTime(from, to)
   }
+  def main(args: Array[String]): Unit = run()
 }

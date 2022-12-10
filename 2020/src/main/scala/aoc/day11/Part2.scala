@@ -3,6 +3,7 @@ package aoc.day11
 import aoc.Solution
 
 import scala.collection.mutable.HashMap
+import aoc.CommonHelper
 
 case class Part2(inputPath: String) extends Solution(inputPath) {
 
@@ -15,11 +16,15 @@ case class Part2(inputPath: String) extends Solution(inputPath) {
 object Part2 {
   type Plan = Seq[Seq[Char]]
 
-  def main(args: Array[String]): Unit = {
+  def run(): Double = {
+    val from = System.nanoTime()
     val sol = Part2("/day11/part1.txt")
     val result = sol.solve()
     println(s"Day 11 - Part 2 - result: $result")
+    val to = System.nanoTime()
+    CommonHelper.nanoTime(from, to)
   }
+  def main(args: Array[String]): Unit = run()
 
   def walkDir(plan: Plan, coords: Coords, dir: (Int, Int)): Option[Char] = {
     if (

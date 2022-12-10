@@ -23,9 +23,13 @@ case class Part2(inputPath: String) extends Solution(inputPath) {
 }
 
 object Part2 {
-  def main(args: Array[String]): Unit = {
+  def run(): Double = {
+    val from = System.nanoTime()
     val sol = Part2("/day01/part2.txt")
     val result = sol.solve()
     println(s"Day 01 - Part 2 - result: $result")
+    val to = System.nanoTime()
+    CommonHelper.nanoTime(from, to)
   }
+  def main(args: Array[String]): Unit = run()
 }

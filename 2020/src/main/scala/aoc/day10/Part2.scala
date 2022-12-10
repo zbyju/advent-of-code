@@ -3,6 +3,7 @@ package aoc.day10
 import aoc.Solution
 
 import scala.collection.mutable.HashMap
+import aoc.CommonHelper
 
 case class Part2(inputPath: String) extends Solution(inputPath) {
   val memo = HashMap[Seq[Int], Long]()
@@ -26,9 +27,13 @@ case class Part2(inputPath: String) extends Solution(inputPath) {
 }
 
 object Part2 {
-  def main(args: Array[String]): Unit = {
+  def run(): Double = {
+    val from = System.nanoTime()
     val sol = Part2("/day10/part1.txt")
     val result = sol.solve()
     println(s"Day 10 - Part 2 - result: $result")
+    val to = System.nanoTime()
+    CommonHelper.nanoTime(from, to)
   }
+  def main(args: Array[String]): Unit = run()
 }

@@ -3,6 +3,7 @@ package aoc.day07
 import aoc.Solution
 
 import scala.language.implicitConversions
+import aoc.CommonHelper
 
 case class Rule(bag: Bag, count: Int) {
   override def equals(that: Any): Boolean = {
@@ -89,9 +90,13 @@ case class Part1(inputPath: String) extends Solution(inputPath) {
 }
 
 object Part1 {
-  def main(args: Array[String]): Unit = {
+  def run(): Double = {
+    val from = System.nanoTime()
     val sol = Part1("/day07/part1.txt")
     val result = sol.solve()
     println(s"Day 07 - Part 1 - result: $result")
+    val to = System.nanoTime()
+    CommonHelper.nanoTime(from, to)
   }
+  def main(args: Array[String]): Unit = run()
 }

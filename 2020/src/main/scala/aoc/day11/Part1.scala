@@ -5,6 +5,7 @@ import aoc.Solution
 import scala.language.implicitConversions
 import scala.collection.immutable.Queue
 import scala.util.Try
+import aoc.CommonHelper
 
 case class Coords(row: Int, col: Int)
 
@@ -19,11 +20,15 @@ case class Part1(inputPath: String) extends Solution(inputPath) {
 object Part1 {
   type Plan = Seq[Seq[Char]]
 
-  def main(args: Array[String]): Unit = {
+  def run(): Double = {
+    val from = System.nanoTime()
     val sol = Part1("/day11/part1.txt")
     val result = sol.solve()
     println(s"Day 11 - Part 1 - result: $result")
+    val to = System.nanoTime()
+    CommonHelper.nanoTime(from, to)
   }
+  def main(args: Array[String]): Unit = run()
 
   def getAdjacent(plan: Plan, coords: Coords): Seq[Char] = {
     val dirs =

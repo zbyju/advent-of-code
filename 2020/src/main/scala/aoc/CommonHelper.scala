@@ -10,4 +10,8 @@ object CommonHelper {
   def getInputLines(bufferedSource: BufferedSource): Iterator[String] = {
     bufferedSource.getLines()
   }
+
+  def nanoTime(from: Long, to: Long): Double = {
+    (to - from).toDouble / 1_000_000
+  }
 }

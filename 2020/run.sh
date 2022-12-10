@@ -1,0 +1,2 @@
+sbt compile
+sbt run
