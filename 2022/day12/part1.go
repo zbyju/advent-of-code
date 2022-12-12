@@ -3,7 +3,6 @@ package day12
 import (
 	"aoc/common"
 	"errors"
-	"strings"
 )
 
 type Coords struct {
@@ -29,19 +28,7 @@ func valAtCoords(lines []string, x Coords) (byte, error) {
 	return lines[x.row][x.col], nil
 }
 
-func canMove(from, to byte) bool {
-	if from == 'S' {
-		from = 'a'
-	}
-	if from == 'z' && to == 'E' {
-		return true
-	} else if to == 'E' {
-		return false
-	}
-	return int(to)-int(from) <= 1
-}
-
-func getNext(lines []string, x Coords) []Coords {
+func getNext(lines []string, x Coords, canMove func(byte, byte) bool) []Coords {
 	next := []Coords{}
 	y, _ := valAtCoords(lines, x)
 	left := Coords{x.row - 1, x.col}
@@ -64,7 +51,7 @@ func getNext(lines []string, x Coords) []Coords {
 	return next
 }
 
-func bfs(lines []string, start Coords) (count int) {
+func bfs(lines []string, start Coords, isEnd func(Coords) bool, canMove func(byte, byte) bool) (count int) {
 	visited := make(map[Coords]int)
 	q := []Coords{}
 	var curr Coords
@@ -77,10 +64,10 @@ func bfs(lines []string, start Coords) (count int) {
 		q = q[1:]
 		v := visited[curr]
 
-		next := getNext(lines, curr)
+		next := getNext(lines, curr, canMove)
 
 		for _, n := range next {
-			if lines[n.row][n.col] == 'E' {
+			if isEnd(n) {
 				return v + 1
 			}
 			_, ok := visited[n]
@@ -93,10 +80,47 @@ func bfs(lines []string, start Coords) (count int) {
 	return -1
 }
 
+func parseInput(input string, startChar rune, endChar rune) (lines []string, start Coords, end Coords) {
+	lines = []string{}
+	line := ""
+	row := 0
+	col := 0
+	for _, c := range input {
+		if c == '\n' {
+			lines = append(lines, line)
+			line = ""
+			col = 0
+			row++
+			continue
+		}
+		if c == startChar {
+			start = Coords{row, col}
+		}
+		if c == endChar {
+			end = Coords{row, col}
+		}
+		if c == 'S' {
+			c = 'a'
+		} else if c == 'E' {
+			c = 'z'
+		}
+		line += string(c)
+		col++
+	}
+	lines = append(lines, line)
+	return lines, start, end
+}
+
 func Solve1(input string) int {
-	lines := strings.Split(input, "\n")
-	start := findStart(lines)
-	return bfs(lines, start)
+	lines, start, end := parseInput(input, 'S', 'E')
+	canMove := func(from, to byte) bool {
+		return int(to)-int(from) <= 1
+	}
+	isEnd := func(b Coords) bool {
+		return b.row == end.row && b.col == end.col
+	}
+
+	return bfs(lines, start, isEnd, canMove)
 }
 
 func Part1() {

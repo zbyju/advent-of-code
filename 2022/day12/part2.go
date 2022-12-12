@@ -2,24 +2,21 @@ package day12
 
 import (
 	"aoc/common"
-	"strings"
 )
 
 func Solve2(input string) int {
-	lines := strings.Split(input, "\n")
-	min := -1
-	for i := range lines {
-		for j := range lines[i] {
-			c := Coords{i, j}
-			if v, _ := valAtCoords(lines, c); v == 'a' || v == 'S' {
-				len := bfs(lines, c)
-				if min == -1 || (len != -1 && len < min) {
-					min = len
-				}
-			}
-		}
+	lines, start, _ := parseInput(input, 'E', 'S')
+
+	canMove := func(from, to byte) bool {
+		return int(from)-int(to) <= 1
 	}
-	return min
+
+	isEnd := func(c Coords) bool {
+		b, _ := valAtCoords(lines, c)
+		return b == 'a'
+	}
+
+	return bfs(lines, start, isEnd, canMove)
 }
 
 func Part2() {
