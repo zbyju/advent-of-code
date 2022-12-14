@@ -66,17 +66,22 @@ func parseInput(lines []string) (map[Coords]bool, int) {
 func Solve1(input string) (sum int) {
 	blocks, abyss := parseInput(strings.Split(input, "\n"))
 	sandCount := 0
+	s := []Coords{{500, 0}}
 	for { // Spawn new
-		sand := Coords{500, 0}
+		sand := s[len(s)-1]
+		s = s[:len(s)-1]
 		for { // Fall
 			if ns := (Coords{sand.x, sand.y + 1}); !blocks[ns] {
 				if ns.y >= abyss {
 					return sandCount
 				}
+				s = append(s, sand)
 				sand = ns
 			} else if ns := (Coords{sand.x - 1, sand.y + 1}); !blocks[ns] {
+				s = append(s, sand)
 				sand = ns
 			} else if ns := (Coords{sand.x + 1, sand.y + 1}); !blocks[ns] {
+				s = append(s, sand)
 				sand = ns
 			} else {
 				sandCount++

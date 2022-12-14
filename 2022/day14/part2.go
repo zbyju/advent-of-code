@@ -8,20 +8,23 @@ import (
 func Solve2(input string) (sum int) {
 	blocks, abyss := parseInput(strings.Split(input, "\n"))
 	sandCount := 0
-	for { // Spawn new
-		sand := Coords{500, 0}
-		if blocks[sand] {
-			return sandCount
-		}
+	s := []Coords{{500, 0}}
+	for len(s) > 0 { // Spawn new
+		sand := s[len(s)-1]
+		s = s[:len(s)-1]
 		for { // Fall
 			if sand.y > abyss {
 				blocks[sand] = true
 				break
-			} else if ns := (Coords{sand.x, sand.y + 1}); !blocks[ns] {
+			}
+			if ns := (Coords{sand.x, sand.y + 1}); !blocks[ns] {
+				s = append(s, sand)
 				sand = ns
 			} else if ns := (Coords{sand.x - 1, sand.y + 1}); !blocks[ns] {
+				s = append(s, sand)
 				sand = ns
 			} else if ns := (Coords{sand.x + 1, sand.y + 1}); !blocks[ns] {
+				s = append(s, sand)
 				sand = ns
 			} else {
 				sandCount++
@@ -30,6 +33,7 @@ func Solve2(input string) (sum int) {
 			}
 		}
 	}
+	return sandCount
 }
 
 func Part2() {
