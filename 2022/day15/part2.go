@@ -40,7 +40,7 @@ func Solve2(input string, max int) (count int64) {
 }
 
 func Part2() {
-	name := "Day #14 - part 2"
+	name := "Day #15 - part 2"
 
 	// common.TestOutputBig(name+" - input 2", 56000011, Solve2(Input1, 20))
 	common.PrintOutputBig(name, Solve2(common.Readfile("./day15/input.txt"), 4_000_000))
