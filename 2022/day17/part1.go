@@ -2,7 +2,6 @@ package day17
 
 import (
 	"aoc/common"
-	"fmt"
 )
 
 type Coords struct {
@@ -88,22 +87,6 @@ func stopRock(rocks *[][7]bool, rock []Coords, height int) int {
 		(*rocks)[r.y][r.x] = true
 	}
 	return height
-}
-
-func print(rocks [][7]bool, rock []Coords) {
-	stopRock(&rocks, rock, 0)
-	for ry := range rocks {
-		y := len(rocks) - 1 - ry
-		fmt.Print("|")
-		for _, r := range rocks[y] {
-			if r {
-				fmt.Print("#")
-			} else {
-				fmt.Print(" ")
-			}
-		}
-		fmt.Println("|")
-	}
 }
 
 func runSimulation(input string, maxRocks int) int {
