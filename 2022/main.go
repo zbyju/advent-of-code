@@ -18,6 +18,7 @@ import (
 	"aoc/day14"
 	"aoc/day15"
 	"aoc/day16"
+	"aoc/day17"
 	"fmt"
 	"log"
 	"os"
@@ -98,6 +99,8 @@ func initSolvers() {
 	solvers.Set("15-2", day15.Part2)
 	solvers.Set("16-1", day16.Part1)
 	solvers.Set("16-2", day16.Part2)
+	solvers.Set("17-1", day17.Part1)
+	solvers.Set("17-2", day17.Part2)
 }
 
 func printHeading(text string) {
