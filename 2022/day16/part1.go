@@ -3,52 +3,56 @@ package day16
 import (
 	"aoc/common"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 )
 
-type Valve struct {
+type RawValve struct {
 	flowRate int
 	next     []string
 }
 
-type Tunnel struct {
-	to map[string]int
-}
-
-type Val struct {
+type Valve struct {
 	index    int
+	name     string
 	flowRate int
+	next     map[string]int
 }
 
-func parseInput(lines []string) (_ map[string]Valve, _ map[string]int, totalFlowRate int) {
+type Valve2 struct {
+	flowRate int
+	next     []int
+}
+
+func parseInput(lines []string) (_ map[string]RawValve, _ map[string]int, totalFlowRate int) {
 	re := regexp.MustCompile(`Valve ([A-Z][A-Z]) has flow rate=(\d+); tunnels? leads? to valves? ([A-Z][A-Z].*)`)
-	valves := make(map[string]Valve)
+	valves := make(map[string]RawValve)
 	flowRates := make(map[string]int)
 	for _, line := range lines {
 		matches := re.FindStringSubmatch(line)
 		fr, _ := strconv.Atoi(matches[2])
 		totalFlowRate += fr
 
-		valve := Valve{fr, strings.Split(matches[3], ", ")}
+		valve := RawValve{fr, strings.Split(matches[3], ", ")}
 		flowRates[matches[1]] = fr
 		valves[matches[1]] = valve
 	}
 	return valves, flowRates, totalFlowRate
 }
 
-func addPath(tunnels *map[string]Tunnel, from string, to string, distance int) {
+func addPath(tunnels *map[string]Valve, from string, to string, distance int) {
 	if from == to {
 		return
 	}
 	tf := (*tunnels)[from]
-	if tf.to == nil {
-		tf.to = map[string]int{}
+	if tf.next == nil {
+		tf.next = map[string]int{}
 	}
-	tf.to[to] = distance
+	tf.next[to] = distance
 }
 
-func shortestPath(valves map[string]Valve, tunnels *map[string]Tunnel, from string) {
+func shortestPath(valves map[string]RawValve, tunnels *map[string]Valve, from string) {
 	q := []string{from}
 	visited := make(map[string]bool)
 	curr := from
@@ -60,9 +64,9 @@ func shortestPath(valves map[string]Valve, tunnels *map[string]Tunnel, from stri
 		for _, nextName := range valves[curr].next {
 			addPath(tunnels, curr, nextName, 1)
 
-			distance := (*tunnels)[from].to[curr] + 1
-			if (*tunnels)[from].to[nextName] == 0 || (*tunnels)[from].to[nextName] > distance {
-				addPath(tunnels, from, nextName, (*tunnels)[from].to[curr]+1)
+			distance := (*tunnels)[from].next[curr] + 1
+			if (*tunnels)[from].next[nextName] == 0 || (*tunnels)[from].next[nextName] > distance {
+				addPath(tunnels, from, nextName, (*tunnels)[from].next[curr]+1)
 			}
 			if !visited[nextName] {
 				q = append(q, nextName)
@@ -71,13 +75,49 @@ func shortestPath(valves map[string]Valve, tunnels *map[string]Tunnel, from stri
 	}
 }
 
-func buildGraph(valves map[string]Valve) map[string]Tunnel {
-	tunnels := make(map[string]Tunnel)
-	for from := range valves {
-		tunnels[from] = Tunnel{make(map[string]int)}
+func buildGraph(valves map[string]RawValve) map[string]Valve {
+	tunnels := make(map[string]Valve)
+	for from, valve := range valves {
+		tunnels[from] = Valve{-1, from, valve.flowRate, make(map[string]int)}
 		shortestPath(valves, &tunnels, from)
 	}
 	return tunnels
+}
+
+func trimGraph(graph map[string]Valve, flowRates map[string]int) []Valve2 {
+	trimmedGraph := make(map[string]Valve)
+	index := 0
+	valveNames := []string{}
+	for k := range flowRates {
+		valveNames = append(valveNames, k)
+	}
+	sort.Slice(valveNames, func(i, j int) bool {
+		return valveNames[i] < valveNames[j]
+	})
+
+	for _, valveName := range valveNames {
+		fr := flowRates[valveName]
+		if fr == 0 && valveName != "AA" {
+			continue
+		}
+		trimmedGraph[valveName] = Valve{index, valveName, fr, make(map[string]int)}
+		index++
+		for to, distance := range graph[valveName].next {
+			if flowRates[to] == 0 {
+				continue
+			}
+			trimmedGraph[valveName].next[to] = distance
+		}
+	}
+	valves := make([]Valve2, 16)
+	for _, v := range trimmedGraph {
+		next := make([]int, 16)
+		for name, distance := range v.next {
+			next[trimmedGraph[name].index] = distance
+		}
+		valves[v.index] = Valve2{v.flowRate, next}
+	}
+	return valves
 }
 
 type Input struct {
@@ -86,58 +126,41 @@ type Input struct {
 	minutesLeft int
 }
 
-func run(graph *map[string]Tunnel, valves *map[string]Val, bitmask int, curr string, minutesLeft int, cache *map[Input]int) int {
-	if max, ok := (*cache)[Input{bitmask, (*valves)[curr].index, minutesLeft}]; ok {
+func run(graph []Valve2, bitmask int, curr int, minutesLeft int, cache *map[Input]int) int {
+	if max, ok := (*cache)[Input{bitmask, curr, minutesLeft}]; ok {
 		return max
 	}
 
 	maxVal := 0
-	for next, distance := range (*graph)[curr].to {
+	for nextIndex, distance := range graph[curr].next {
+		if distance == 0 {
+			continue
+		}
 		time := minutesLeft - distance - 1
 		if time <= 1 {
 			continue
 		}
-		bit := 1 << (*valves)[next].index
+		bit := 1 << nextIndex
 		if bitmask&bit != 0 {
 			continue
 		}
-		fr := (*valves)[next].flowRate
+		fr := graph[nextIndex].flowRate
 		bm := bitmask | bit
-		if m := run(graph, valves, bm, next, time, cache) + fr*time; m > maxVal {
+
+		if m := run(graph, bm, nextIndex, time, cache) + fr*time; m > maxVal {
 			maxVal = m
 		}
 	}
-	(*cache)[Input{bitmask, (*valves)[curr].index, minutesLeft}] = maxVal
+	(*cache)[Input{bitmask, curr, minutesLeft}] = maxVal
 	return maxVal
 }
 
-func trimGraph(graph map[string]Tunnel, flowRates map[string]int) (map[string]Tunnel, map[string]Val) {
-	trimmedGraph := make(map[string]Tunnel)
-	trimmedValves := make(map[string]Val)
-	index := 0
-	for valve, fr := range flowRates {
-		if fr == 0 && valve != "AA" {
-			continue
-		}
-		trimmedValves[valve] = Val{index, fr}
-		index++
-		trimmedGraph[valve] = Tunnel{make(map[string]int)}
-		for to, distance := range graph[valve].to {
-			if flowRates[to] == 0 {
-				continue
-			}
-			trimmedGraph[valve].to[to] = distance
-		}
-	}
-	return trimmedGraph, trimmedValves
-}
-
 func Solve1(input string) (count int) {
-	valves, flowRates, _ := parseInput(strings.Split(input, "\n"))
-	graph := buildGraph(valves)
-	trimmedGraph, trimmedValves := trimGraph(graph, flowRates)
+	rawValves, flowRates, _ := parseInput(strings.Split(input, "\n"))
+	graph := buildGraph(rawValves)
+	valves := trimGraph(graph, flowRates)
 	cache := make(map[Input]int)
-	max := run(&trimmedGraph, &trimmedValves, 0, "AA", 30, &cache)
+	max := run(valves, 0, 0, 30, &cache)
 	return max
 }
 

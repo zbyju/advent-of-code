@@ -6,14 +6,14 @@ import (
 )
 
 func Solve2(input string) (count int) {
-	valves, flowRates, _ := parseInput(strings.Split(input, "\n"))
-	graph := buildGraph(valves)
-	trimmedGraph, trimmedValves := trimGraph(graph, flowRates)
+	rawValves, flowRates, _ := parseInput(strings.Split(input, "\n"))
+	graph := buildGraph(rawValves)
+	valves := trimGraph(graph, flowRates)
 	cache := make(map[Input]int)
-	b := (1 << len(trimmedValves)) - 1
+	b := (1 << len(valves)) - 1
 	max := 0
-	for i := 0; i <= (b+1)/2; i++ {
-		if m := run(&trimmedGraph, &trimmedValves, i, "AA", 26, &cache) + run(&trimmedGraph, &trimmedValves, b^i, "AA", 26, &cache); m > max {
+	for i := 1; i <= (b+1)/2; i += 2 {
+		if m := run(valves, i, 0, 26, &cache) + run(valves, b^i, 0, 26, &cache); m > max {
 			max = m
 		}
 	}
