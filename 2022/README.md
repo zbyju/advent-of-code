@@ -27,7 +27,7 @@ All the solutions were ran on my PC: AMD Ryzen 7 5800X; 16GB RAM
 |      Day 17       |           4.281 |           7.749 |
 |      Day 18       |           2.908 |          18.039 |
 |      Day 19       |         469.723 |           11000 |
-|      Day 20       |                 |                 |
+|      Day 20       |           3.760 |          43.070 |
 |      Day 21       |                 |                 |
 |      Day 22       |                 |                 |
 |      Day 23       |                 |                 |
