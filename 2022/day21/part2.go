@@ -66,6 +66,24 @@ func Solve2(input string) int64 {
 			return mid
 		}
 		if lo > hi {
+			break
+		}
+	}
+
+	lo, hi = int64(1), int64(1_000_000_000_000_000)
+	for {
+		mid := (hi-lo)/2 + lo
+		cache["humn"] = float64(mid)
+
+		cmp := run2(monkeys, &cache, "root")
+		if cmp < 0 {
+			hi = mid - 1
+		} else if cmp > 0 {
+			lo = mid + 1
+		} else {
+			return mid
+		}
+		if lo > hi {
 			return -1
 		}
 	}
@@ -74,5 +92,6 @@ func Solve2(input string) int64 {
 func Part2() {
 	name := "Day #21 - part 2"
 
+	common.TestOutputBig(name+" - input 1", 301, Solve2(Input1))
 	common.PrintOutputBig(name, Solve2(common.Readfile("./day21/input.txt")))
 }
