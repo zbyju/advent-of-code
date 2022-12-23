@@ -2,7 +2,6 @@ package day22
 
 import (
 	"aoc/common"
-	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -105,7 +104,6 @@ func Solve1(input string, size int) int {
 			if grid[n.y][n.x] == '#' {
 				break
 			}
-			fmt.Println("E:", pos, n)
 			pos = Pos{n.x, n.y, pos.dir}
 		}
 		pos.dir = mod(pos.dir+cmd.dir, 4)
