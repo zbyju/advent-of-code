@@ -32,7 +32,7 @@ All the solutions were ran on my PC: AMD Ryzen 7 5800X; 16GB RAM
 |      Day 22       |           0.872 |           0.591 |
 |      Day 23       |          34.469 |            2869 |
 |      Day 24       |          60.673 |         850.692 |
-|      Day 25       |                 |                 |
+|      Day 25       |           0.115 |           0.013 |
 
 ## How to run
 
