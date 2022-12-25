@@ -35,7 +35,7 @@ Link to the contest: https://adventofcode.com/
 |   22    |                          |                                             |                |           ⭐⭐           |
 |   23    |                          |                                             |                |           ⭐⭐           |
 |   24    |                          |                                             |                |           ⭐⭐           |
-|   25    |                          |                                             |                |                          |
+|   25    |                          |                                             |                |           ⭐⭐           |
 
 ## Year 2022
 
