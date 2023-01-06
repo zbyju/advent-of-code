@@ -4,6 +4,10 @@ I will post all of my solutions for the advent of code event here.
 
 Link to the contest: https://adventofcode.com/
 
+- 2015 - JavaScript
+- 2016 - TypeScript
+- 2017 - Rust
+- 2018 - Python
 - [2019](/2019/) - Python
 - [2020](/2020/src/main/scala/aoc/) - Scala 2
 - 2021 - Scala 3
