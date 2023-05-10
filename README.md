@@ -62,3 +62,6 @@ I decided to take the opportunity and learn a new language (Python) while solvin
 - Haskell
 - TypeScript
 - C++
+- Zig
+- Carbon
+- OCaml
