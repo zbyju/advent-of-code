@@ -58,10 +58,11 @@ I decided to take the opportunity and learn a new language (Python) while solvin
 - **Rust**
 - **Elixir**
 - Kotlin
-- Swift
 - Haskell
-- TypeScript
 - C++
 - Zig
+- Swift
+
+---
 - Carbon
 - OCaml
