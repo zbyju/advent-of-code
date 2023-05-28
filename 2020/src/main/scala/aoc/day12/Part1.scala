@@ -6,11 +6,8 @@ import aoc.CommonHelper
 case class Part1(inputPath: String) extends Solution(inputPath) {
   override def solve(): Int = {
     val res = this.lines
-      .map(str => Moves.parseStep(str))
-      .foldLeft((0, 0, "E"))((acc, mv: Step) => {
-        println(acc, mv, mv.move(acc))
-        mv.move(acc)
-      })
+      .map(str => Moves1.parseStep(str))
+      .foldLeft((0, 0, "E"))((acc, mv: Step1) => mv.move(acc))
     Math.abs(res._1) + Math.abs(res._2)
   }
 }
