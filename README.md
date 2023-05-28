@@ -26,7 +26,7 @@ Link to the contest: https://adventofcode.com/
 |    9    |                          |                    ⭐⭐                     |                |           ⭐⭐           |
 |   10    |                          |                    ⭐⭐                     |                |           ⭐⭐           |
 |   11    |                          |                    ⭐⭐                     |                |           ⭐⭐           |
-|   12    |                          |                                             |                |           ⭐⭐           |
+|   12    |                          |                    ⭐⭐                     |                |           ⭐⭐           |
 |   13    |                          |                                             |                |           ⭐⭐           |
 |   14    |                          |                                             |                |           ⭐⭐           |
 |   15    |                          |                                             |                |           ⭐⭐           |
@@ -64,5 +64,6 @@ I decided to take the opportunity and learn a new language (Python) while solvin
 - Swift
 
 ---
+
 - Carbon
 - OCaml
