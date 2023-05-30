@@ -28,7 +28,11 @@ object PerformanceRunner {
         day11.Part1.run _,
         day11.Part2.run _,
         day12.Part1.run _,
-        day12.Part2.run _
+        day12.Part2.run _,
+        day13.Part1.run _,
+        day13.Part2.run _,
+        day15.Part1.run _,
+        day15.Part2.run _
       )
     val overallTime: Double = sols
       .map(sol => {
