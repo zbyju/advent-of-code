@@ -31,6 +31,8 @@ object PerformanceRunner {
         day12.Part2.run _,
         day13.Part1.run _,
         day13.Part2.run _,
+        day14.Part1.run _,
+        day14.Part2.run _,
         day15.Part1.run _,
         day15.Part2.run _
       )
