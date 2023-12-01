@@ -43,4 +43,3 @@ fn main() {
         _ => eprintln!("Invalid day specified"),
     }
 }
-

@@ -31,6 +31,8 @@ pub trait AdventDay {
     fn part2(&self, input: &str) -> SolutionOutput;
 
     fn run(&self, test_case: Option<String>) {
+        use std::time::Instant;
+
         let base_path = self.input_base_path();
         let input_file = match test_case {
             Some(test_file) => format!("{}/inputs/{}", base_path, test_file),
@@ -39,13 +41,21 @@ pub trait AdventDay {
 
         let input = std::fs::read_to_string(input_file).expect("Failed to read input file");
 
-        let output_part1 = match self.part1(&input) {
+        let now1 = Instant::now();
+        let solution_part1 = self.part1(&input);
+        let elapsed1 = now1.elapsed();
+
+        let now2 = Instant::now();
+        let solution_part2 = self.part2(&input);
+        let elapsed2 = now2.elapsed();
+
+        let output_part1 = match solution_part1 {
             SolutionOutput::Int(value) => value.to_string(),
             SolutionOutput::Float(value) => value.to_string(),
             SolutionOutput::String(value) => value,
         };
 
-        let output_part2 = match self.part2(&input) {
+        let output_part2 = match solution_part2 {
             SolutionOutput::Int(value) => value.to_string(),
             SolutionOutput::Float(value) => value.to_string(),
             SolutionOutput::String(value) => value,
@@ -53,6 +63,10 @@ pub trait AdventDay {
 
         println!("Part 1: {}", output_part1);
         println!("Part 2: {}", output_part2);
+
+        println!("Time to solve part1: {:.2?}", elapsed1);
+        println!("Time to solve part2: {:.2?}", elapsed2);
+        println!("Time to solve all:   {:.2?}", elapsed1 + elapsed2);
     }
 }
 
