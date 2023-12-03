@@ -7,13 +7,11 @@ impl AdventDay for Day00 {
         "src/days/day00".to_string()
     }
 
-    fn part1(&self, input: &str) -> SolutionOutput {
-        println!("Input for Part 1:\n{}", input);
-        SolutionOutput::String("Part 1 output displayed".to_string())
+    fn part1(&self, _: &str) -> SolutionOutput {
+        SolutionOutput::String("Hello, Advent of Code!".to_string())
     }
 
-    fn part2(&self, input: &str) -> SolutionOutput {
-        println!("Input for Part 2:\n{}", input);
-        SolutionOutput::String("Part 2 output displayed".to_string())
+    fn part2(&self, _: &str) -> SolutionOutput {
+        SolutionOutput::Float(2.0)
     }
 }

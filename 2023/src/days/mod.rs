@@ -30,7 +30,7 @@ pub trait AdventDay {
     fn part1(&self, input: &str) -> SolutionOutput;
     fn part2(&self, input: &str) -> SolutionOutput;
 
-    fn run(&self, test_case: Option<String>) {
+    fn run(&self, test_case: Option<String>, timeit: bool) {
         use std::time::Instant;
 
         let base_path = self.input_base_path();
@@ -64,9 +64,11 @@ pub trait AdventDay {
         println!("Part 1: {}", output_part1);
         println!("Part 2: {}", output_part2);
 
-        println!("Time to solve part1: {:.2?}", elapsed1);
-        println!("Time to solve part2: {:.2?}", elapsed2);
-        println!("Time to solve all:   {:.2?}", elapsed1 + elapsed2);
+        if timeit {
+            println!("Time to solve part1: {:.2?}", elapsed1);
+            println!("Time to solve part2: {:.2?}", elapsed2);
+            println!("Time to solve all:   {:.2?}", elapsed1 + elapsed2);
+        }
     }
 }
 
