@@ -14,22 +14,22 @@ impl AdventDay for Day02 {
         let max_green = 13;
         let max_blue = 14;
 
+        let is_overflowing = |x: &&Color| -> bool {
+            match x {
+                Color::Red(i) => *i > max_red,
+                Color::Green(i) => *i > max_green,
+                Color::Blue(i) => *i > max_blue,
+            }
+        };
+
         let res: i32 = games
             .iter()
             .filter(|g| {
-                g.1.iter()
-                    .filter(|s| {
-                        s.iter()
-                            .filter(|x| match x {
-                                Color::Red(i) => *i > max_red,
-                                Color::Green(i) => *i > max_green,
-                                Color::Blue(i) => *i > max_blue,
-                            })
-                            .count()
-                            > 0
-                    })
-                    .count()
-                    == 0
+                let number_of_overflowing_sets =
+                    g.1.iter()
+                        .filter(|s| s.iter().filter(is_overflowing).count() > 0)
+                        .count();
+                number_of_overflowing_sets == 0
             })
             .map(|g| g.0)
             .sum();
