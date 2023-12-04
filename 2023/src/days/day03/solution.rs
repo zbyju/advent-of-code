@@ -4,6 +4,17 @@ use crate::days::{AdventDay, SolutionOutput};
 
 pub struct Day03;
 
+fn find_leftest(grid: &Vec<Vec<char>>, (r, c): (i64, i64)) -> (i64, i64) {
+    let ch = grid
+        .get(r as usize)
+        .and_then(|y| y.get((c as usize).wrapping_sub(1)));
+    if ch.is_some() && ch.unwrap().is_numeric() {
+        find_leftest(grid, (r, c - 1))
+    } else {
+        (r, c)
+    }
+}
+
 impl AdventDay for Day03 {
     fn input_base_path(&self) -> String {
         "src/days/day03".to_string()
@@ -11,92 +22,106 @@ impl AdventDay for Day03 {
 
     fn part1(&self, input: &str) -> SolutionOutput {
         let grid: Vec<Vec<char>> = input.split('\n').map(|row| row.chars().collect()).collect();
-        let mut cs = HashSet::new();
-
-        for (r, row) in grid.iter().enumerate() {
-            for (c, ch) in row.iter().enumerate() {
-                if ch.is_numeric() || *ch == '.' {
-                    continue;
-                }
-                for dr in [r - 1, r, r + 1] {
-                    for mut dc in [c - 1, c, c + 1] {
-                        let target_ch = grid.get(dr).and_then(|row| row.get(dc)).unwrap_or(&'.');
-                        if !target_ch.is_numeric() {
-                            continue;
-                        }
-                        while grid[dr]
-                            .iter()
-                            .nth(dc.wrapping_sub(1))
-                            .unwrap_or(&'.')
-                            .is_numeric()
-                        {
-                            dc -= 1;
-                        }
-                        cs.insert((dr, dc));
+        let coords_of_symbols: Vec<(i64, i64)> = grid
+            .iter()
+            .enumerate()
+            .flat_map(move |(r, l)| {
+                l.iter().enumerate().flat_map(move |(c, ch)| {
+                    if ch != &'.' && !ch.is_numeric() {
+                        Some((r as i64, c as i64))
+                    } else {
+                        None
                     }
-                }
-            }
-        }
+                })
+            })
+            .collect();
 
-        let mut ns = Vec::new();
-        for (nr, mut nc) in cs {
-            let mut s = String::new();
-            while nc < grid[nr].len() && grid[nr][nc].is_numeric() {
-                s.push(grid[nr][nc]);
-                nc += 1;
-            }
-            ns.push(s.parse::<i64>().unwrap());
-        }
+        let symbol_neighbors: Vec<HashSet<(i64, i64)>> = coords_of_symbols
+            .iter()
+            .map(|&(x, y)| {
+                (-1..=1)
+                    .flat_map(move |dx| (-1..=1).map(move |dy| (x + dx, y + dy)))
+                    .filter(|(r, c)| {
+                        let ch = grid.get(*r as usize).and_then(|y| y.get(*c as usize));
+                        ch.is_some() && ch.unwrap().is_numeric()
+                    })
+                    .map(|(r, c)| find_leftest(&grid, (r, c)))
+                    .collect()
+            })
+            .collect();
 
-        let sum = ns.iter().sum();
+        let numbers: Vec<i64> = symbol_neighbors
+            .iter()
+            .flat_map(|sc| {
+                sc.iter().map(|(r, c)| {
+                    let num_str: String = grid
+                        .get(*r as usize)
+                        .unwrap()
+                        .iter()
+                        .skip(*c as usize)
+                        .take_while(|ch| ch.is_numeric())
+                        .collect();
+                    num_str.parse::<i64>().unwrap()
+                })
+            })
+            .collect();
 
-        SolutionOutput::Int(sum)
+        SolutionOutput::Int(numbers.iter().sum())
     }
 
     fn part2(&self, input: &str) -> SolutionOutput {
         let grid: Vec<Vec<char>> = input.split('\n').map(|row| row.chars().collect()).collect();
-        let mut total: i64 = 0;
+        let coords_of_symbols: Vec<(i64, i64)> = grid
+            .iter()
+            .enumerate()
+            .flat_map(move |(r, l)| {
+                l.iter().enumerate().flat_map(move |(c, ch)| {
+                    if ch != &'.' && !ch.is_numeric() {
+                        Some((r as i64, c as i64))
+                    } else {
+                        None
+                    }
+                })
+            })
+            .collect();
 
-        for (r, row) in grid.iter().enumerate() {
-            for (c, ch) in row.iter().enumerate() {
-                if ch.is_numeric() || *ch == '.' {
-                    continue;
-                }
-                let mut cs = HashSet::new();
-                for dr in [r - 1, r, r + 1] {
-                    for mut dc in [c - 1, c, c + 1] {
-                        let target_ch = grid.get(dr).and_then(|row| row.get(dc)).unwrap_or(&'.');
-                        if !target_ch.is_numeric() {
-                            continue;
-                        }
-                        while grid[dr]
+        let symbol_neighbors: Vec<HashSet<(i64, i64)>> = coords_of_symbols
+            .iter()
+            .map(|&(x, y)| {
+                (-1..=1)
+                    .flat_map(move |dx| (-1..=1).map(move |dy| (x + dx, y + dy)))
+                    .filter(|(r, c)| {
+                        let ch = grid.get(*r as usize).and_then(|y| y.get(*c as usize));
+                        ch.is_some() && ch.unwrap().is_numeric()
+                    })
+                    .map(|(r, c)| find_leftest(&grid, (r, c)))
+                    .collect()
+            })
+            .collect();
+
+        let numbers: Vec<Vec<i64>> = symbol_neighbors
+            .iter()
+            .map(|sc| {
+                sc.iter()
+                    .map(|(r, c)| {
+                        let num_str: String = grid
+                            .get(*r as usize)
+                            .unwrap()
                             .iter()
-                            .nth(dc.wrapping_sub(1))
-                            .unwrap_or(&'.')
-                            .is_numeric()
-                        {
-                            dc -= 1;
-                        }
+                            .skip(*c as usize)
+                            .take_while(|ch| ch.is_numeric())
+                            .collect();
+                        num_str.parse::<i64>().unwrap()
+                    })
+                    .collect()
+            })
+            .collect();
 
-                        cs.insert((dr, dc));
-                    }
-                }
-                if cs.len() != 2 {
-                    continue;
-                }
-                let mut ns = Vec::new();
-                for (nr, mut nc) in cs {
-                    let mut s = String::new();
-                    while nc < grid[nr].len() && grid[nr][nc].is_numeric() {
-                        s.push(grid[nr][nc]);
-                        nc += 1;
-                    }
-                    ns.push(s.parse::<i64>().unwrap());
-                }
-                total += ns[0] * ns[1];
-            }
-        }
+        let gear_ratios = numbers
+            .iter()
+            .filter(|sc| sc.len() == 2)
+            .map(|sc| sc.first().unwrap() * sc.get(1).unwrap());
 
-        SolutionOutput::Int(total)
+        SolutionOutput::Int(gear_ratios.sum())
     }
 }
