@@ -48,8 +48,8 @@ fn run_all() {
     println!("Time to solve all:   {:.2?}", elapsed);
 }
 
-fn run_single(day: &String, test_case: Option<String>) {
-    match day.as_str() {
+fn run_single(day: &str, test_case: Option<String>) {
+    match day {
         "day00" => days::day00::solution::Day00.run(test_case, true),
         "day01" => days::day01::solution::Day01.run(test_case, true),
         "day02" => days::day02::solution::Day02.run(test_case, true),

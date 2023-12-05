@@ -1,4 +1,6 @@
+extern crate regex;
 use crate::days::{AdventDay, SolutionOutput};
+use regex::Regex;
 
 pub struct Day01;
 
@@ -14,8 +16,8 @@ impl AdventDay for Day01 {
             .collect::<String>()
             .lines()
             .map(|l| {
-                let first_num = l.chars().nth(0).and_then(|x| x.to_digit(10));
-                let last_num = l.chars().nth_back(0).and_then(|x| x.to_digit(10));
+                let first_num = l.chars().next().and_then(|x| x.to_digit(10));
+                let last_num = l.chars().next_back().and_then(|x| x.to_digit(10));
                 match (first_num, last_num) {
                     (Some(a), Some(b)) => Some(a * 10 + b),
                     _ => None,
@@ -28,15 +30,16 @@ impl AdventDay for Day01 {
     }
 
     fn part2(&self, input: &str) -> SolutionOutput {
-        let digits = [
-            "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "0", "1", "2",
-            "3", "4", "5", "6", "7", "8", "9",
-        ];
+        let input = replace_numbers(input);
+
         let res = input
+            .chars()
+            .filter(|x| x.is_numeric() || x.is_control())
+            .collect::<String>()
             .lines()
             .map(|l| {
-                let first_num = find_number(l, digits);
-                let last_num = find_number_rev(l, digits);
+                let first_num = l.chars().next().and_then(|x| x.to_digit(10));
+                let last_num = l.chars().next_back().and_then(|x| x.to_digit(10));
                 match (first_num, last_num) {
                     (Some(a), Some(b)) => Some(a * 10 + b),
                     _ => None,
@@ -49,24 +52,24 @@ impl AdventDay for Day01 {
     }
 }
 
-fn find_number(line: &str, digits: [&str; 19]) -> Option<usize> {
-    let res = digits
-        .iter()
-        .enumerate()
-        .filter_map(|(i, d)| line.find(d).map(|x| (i, x)))
-        .min_by_key(|t| t.1)
-        .map(|(i, _)| if i <= 8 { i + 1 } else { i - 9 });
+fn replace_numbers(input: &str) -> String {
+    let replacements = [
+        ("one", "o1e"),
+        ("two", "t2o"),
+        ("three", "t3e"),
+        ("four", "f4r"),
+        ("five", "f5e"),
+        ("six", "s6x"),
+        ("seven", "s7n"),
+        ("eight", "e8t"),
+        ("nine", "n9e"),
+    ];
 
-    res
-}
+    let mut result = String::from(input);
 
-fn find_number_rev(line: &str, digits: [&str; 19]) -> Option<usize> {
-    let res = digits
-        .iter()
-        .enumerate()
-        .filter_map(|(i, d)| line.rfind(d).map(|x| (i, x)))
-        .max_by_key(|t| t.1)
-        .map(|(i, _)| if i <= 8 { i + 1 } else { i - 9 });
-
-    res
+    for &(pattern, replacement) in &replacements {
+        let re = Regex::new(pattern).unwrap();
+        result = re.replace_all(&result, replacement).into_owned();
+    }
+    result
 }
