@@ -27,9 +27,24 @@ fn solve(input: String) -> SolutionOutput {
     let number_of_ways_to_beat: Vec<i64> = zipped
         .iter()
         .map(|&(time, distance_to_beat)| {
-            (1..time)
-                .filter(move |charge_time| (time - charge_time) * charge_time > distance_to_beat)
-                .count() as i64
+            let best = time / 2;
+            let mut count = 0;
+
+            for charge_time in (1..best).rev() {
+                if (time - charge_time) * charge_time > distance_to_beat {
+                    count += 1;
+                } else {
+                    break;
+                }
+            }
+            for charge_time in best..time {
+                if (time - charge_time) * charge_time > distance_to_beat {
+                    count += 1;
+                } else {
+                    break;
+                }
+            }
+            count
         })
         .collect();
 
