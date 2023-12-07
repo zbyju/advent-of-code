@@ -9,7 +9,17 @@ fn char_value(c: char) -> u8 {
         'Q' => 12,
         'J' => 11,
         'T' => 10,
-        _ => c as u8 - '0' as u8,
+        _ => c as u8 - b'0',
+    }
+}
+fn char_value2(c: char) -> u8 {
+    match c {
+        'A' => 14,
+        'K' => 13,
+        'Q' => 12,
+        'J' => 1,
+        'T' => 10,
+        _ => c as u8 - b'0',
     }
 }
 
@@ -25,34 +35,32 @@ enum HandType {
     HighCard,
 }
 
-fn hand_type(card: &Vec<char>) -> HandType {
-    let mut sorted = card.clone();
-    sorted.sort_by(|a, b| char_value(*a).cmp(&char_value(*b)));
-    let mut counts = sorted.into_iter().fold(Vec::new(), |mut acc, ch| {
-        if let Some((last_char, count)) = acc.last_mut() {
-            if *last_char == ch {
-                *count += 1;
-            } else {
-                acc.push((ch, 1));
-            }
-        } else {
-            acc.push((ch, 1));
+fn count_cards(hand: &Vec<u8>) -> (u8, u8, u8) {
+    let mut counts: [u8; 13] = [0; 13];
+    let mut max1 = 0;
+    let mut max2 = 0;
+    let mut jacks = 0;
+    for x in hand {
+        if *x == 1 {
+            jacks += 1;
+            continue;
         }
-        acc
-    });
+        counts[(x - 2) as usize] += 1;
+    }
+    for value in counts {
+        if value > max1 {
+            max2 = max1;
+            max1 = value;
+        } else if value > max2 {
+            max2 = value;
+        }
+    }
 
-    counts.sort_by_key(|x| x.1);
+    (max1, max2, jacks)
+}
 
-    let jacks = counts
-        .iter()
-        .filter(|&(ch, _)| *ch == '1')
-        .nth(0)
-        .map(|x| x.1)
-        .unwrap_or(0);
-
-    let mut cs = counts.iter().rev().filter(|x| x.0 != '1');
-    let c0 = cs.next().unwrap_or(&('1', 0)).1;
-    let c1 = cs.next().unwrap_or(&('1', 0)).1;
+fn hand_type(hand: &Vec<u8>) -> HandType {
+    let (c0, c1, jacks) = count_cards(hand);
 
     if c0 + jacks == 5 {
         return HandType::FiveOfKind;
@@ -81,28 +89,34 @@ impl AdventDay for Day07 {
     }
 
     fn part1(&self, input: &str) -> SolutionOutput {
-        let cards: Vec<(Vec<char>, i64, HandType)> = input
+        let hands: Vec<(Vec<u8>, i64, HandType)> = input
             .lines()
             .map(|l| {
                 let split = l.split(' ');
-                let card: Vec<char> = split.clone().nth(0).unwrap().chars().collect();
-                let hand_type = hand_type(&card);
+                let hand: Vec<u8> = split
+                    .clone()
+                    .next()
+                    .unwrap()
+                    .chars()
+                    .map(char_value)
+                    .collect();
+                let hand_type = hand_type(&hand);
                 let bid_str = split.clone().nth(1).unwrap();
                 let bid: i64 = bid_str.parse().unwrap();
 
-                (card, bid, hand_type)
+                (hand, bid, hand_type)
             })
             .collect();
 
-        let mut sorted_hands = cards;
+        let mut sorted_hands = hands;
         sorted_hands.sort_by(|a, b| {
             let a_type = a.2 as u8;
             let b_type = b.2 as u8;
 
             if a_type == b_type {
                 for i in 0..5 {
-                    let a_val = char_value(a.0[i as usize]);
-                    let b_val = char_value(b.0[i as usize]);
+                    let a_val = a.0[i as usize];
+                    let b_val = b.0[i as usize];
                     if a_val != b_val {
                         return b_val.cmp(&a_val);
                     }
@@ -122,34 +136,34 @@ impl AdventDay for Day07 {
     }
 
     fn part2(&self, input: &str) -> SolutionOutput {
-        let cards: Vec<(Vec<char>, i64, HandType)> = input
+        let hands: Vec<(Vec<u8>, i64, HandType)> = input
             .lines()
             .map(|l| {
                 let split = l.split(' ');
-                let card: Vec<char> = split
+                let hand: Vec<u8> = split
                     .clone()
-                    .nth(0)
+                    .next()
                     .unwrap()
-                    .replace('J', "1")
                     .chars()
+                    .map(char_value2)
                     .collect();
-                let hand_type = hand_type(&card);
+                let hand_type = hand_type(&hand);
                 let bid_str = split.clone().nth(1).unwrap();
                 let bid: i64 = bid_str.parse().unwrap();
 
-                (card, bid, hand_type)
+                (hand, bid, hand_type)
             })
             .collect();
 
-        let mut sorted_hands = cards;
+        let mut sorted_hands = hands;
         sorted_hands.sort_by(|a, b| {
             let a_type = a.2 as u8;
             let b_type = b.2 as u8;
 
             if a_type == b_type {
                 for i in 0..5 {
-                    let a_val = char_value(a.0[i as usize]);
-                    let b_val = char_value(b.0[i as usize]);
+                    let a_val = a.0[i as usize];
+                    let b_val = b.0[i as usize];
                     if a_val != b_val {
                         return b_val.cmp(&a_val);
                     }
