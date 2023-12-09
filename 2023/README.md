@@ -32,6 +32,8 @@ Current running of all solutions (part 1 + part 2 of all days) is: **`1.60159ms`
 | Day 24 |        |        |          |
 | Day 25 |        |        |          |
 
+*These times were measured on my personal computer: AMD Ryzen 7 5800X; 16GB RAM*
+
 ## Usage
 
 The project has a very strict structure. There is a folder for each `day` inside `days` that contains `solution.rs` where the solution is implemented. There are also `input.txt` (includes the input for that day) and `testX.txt` (includes the test inputs for that day) files inside `inputs` folder.
