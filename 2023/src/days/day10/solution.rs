@@ -194,20 +194,11 @@ impl AdventDay for Day10 {
                     max = nd;
                 }
 
-                println!(
-                    "Adding: {} ({} {})",
-                    map.get(n.1).unwrap().get(n.0).unwrap(),
-                    n.1,
-                    n.0
-                );
-
                 q.push_back(n);
                 distances.insert(n, nd);
                 visited.insert(n);
             }
         }
-
-        println!("done");
 
         let lp: Vec<Vec<char>> = map
             .iter()
@@ -222,26 +213,17 @@ impl AdventDay for Day10 {
 
         let mut res = 0;
 
-        for (r, row) in map.iter().enumerate() {
+        for (y, row) in lp.iter().enumerate() {
             let mut num_intersections = 0;
 
-            for (c, ch) in row.iter().enumerate() {
+            for (x, ch) in row.iter().enumerate() {
                 match ch {
-                    '|' | 'J' | 'L' if visited.contains(&(r, c)) => {
+                    '|' | 'J' | 'L' if visited.contains(&(x, y)) => {
                         num_intersections += 1;
                     }
                     '.' if num_intersections % 2 == 1 => res += 1,
                     _ => {}
                 }
-                println!(
-                    "{} ({} {}, {}), {} {}",
-                    ch,
-                    c,
-                    r,
-                    visited.contains(&(r, c)),
-                    num_intersections,
-                    res
-                );
             }
         }
 
