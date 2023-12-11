@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, HashSet};
+use std::collections::BTreeSet;
 
 use crate::days::{AdventDay, SolutionOutput};
 
@@ -7,7 +7,7 @@ pub struct Day11;
 fn parse(input: &str) -> (Vec<(usize, usize)>, Vec<usize>, Vec<usize>) {
     let lines: Vec<_> = input.lines().collect();
     let ly = lines.len();
-    let lx = lines.get(0).map_or(0, |line| line.len());
+    let lx = lines.first().map_or(0, |line| line.len());
     let mut galaxies = vec![];
     let mut empty_rows: BTreeSet<usize> = (0..ly).collect();
     let mut empty_cols: BTreeSet<usize> = (0..lx).collect();

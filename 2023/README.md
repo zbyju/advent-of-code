@@ -2,7 +2,9 @@
 
 ## Challenge - Beat AoC in 1s
 
-Current running of all solutions (part 1 + part 2 of all days) is: **`6.55214ms`**
+Current running of all solutions (part 1 + part 2 of all days) is: **`8.54214ms`**
+
+*Both parts are ran separatly - no intermediate results are reused for part 2.*
 
 |        | Part 1 | Part 2 | Combined |
 |--------|-------:|-------:|---------:|
@@ -16,7 +18,7 @@ Current running of all solutions (part 1 + part 2 of all days) is: **`6.55214ms`
 | Day 08 |544.54µs|2.05ms  |2.49ms    |
 | Day 09 |140.19µs|130.36µs|270.55µs  |
 | Day 10 |1.11ms  |1.08ms  |2.19ms    |
-| Day 11 |        |        |          |
+| Day 11 |991.06µs|999.88µs|1.99ms    |
 | Day 12 |        |        |          |
 | Day 13 |        |        |          |
 | Day 14 |        |        |          |
