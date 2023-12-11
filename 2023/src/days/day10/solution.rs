@@ -1,10 +1,100 @@
-use std::collections::{HashMap, HashSet, VecDeque};
+use std::collections::HashSet;
 
 use crate::days::{AdventDay, SolutionOutput};
 
 pub struct Day10;
 
-fn parse(input: &str) -> (Vec<Vec<char>>, (usize, usize)) {
+#[derive(PartialEq, Eq, Hash, Copy, Clone, Debug)]
+struct Pos(usize, usize);
+
+impl Pos {
+    fn new(x: usize, y: usize) -> Self {
+        Pos(x, y)
+    }
+
+    fn val(&self) -> (i64, i64) {
+        (self.0 as i64, self.1 as i64)
+    }
+
+    fn x(&self) -> usize {
+        self.0
+    }
+
+    fn y(&self) -> usize {
+        self.1
+    }
+
+    fn next(&self, dir: &Dir) -> Option<Pos> {
+        let x = (self.x() as isize).checked_add(dir.x());
+        let y = (self.y() as isize).checked_add(dir.y());
+        match (x, y) {
+            (Some(x), Some(y)) => Some(Pos(x as usize, y as usize)),
+            _ => None,
+        }
+    }
+
+    fn nexts(&self, grid: &[Vec<char>]) -> Vec<Pos> {
+        let ch = self.char_at(grid);
+        match ch {
+            '|' => vec![self.next(&Dir::Up).unwrap(), self.next(&Dir::Down).unwrap()],
+            '-' => vec![
+                self.next(&Dir::Left).unwrap(),
+                self.next(&Dir::Right).unwrap(),
+            ],
+            'L' => vec![
+                self.next(&Dir::Up).unwrap(),
+                self.next(&Dir::Right).unwrap(),
+            ],
+            'J' => vec![self.next(&Dir::Up).unwrap(), self.next(&Dir::Left).unwrap()],
+            'F' => vec![
+                self.next(&Dir::Down).unwrap(),
+                self.next(&Dir::Right).unwrap(),
+            ],
+            '7' => vec![
+                self.next(&Dir::Down).unwrap(),
+                self.next(&Dir::Left).unwrap(),
+            ],
+            _ => vec![],
+        }
+    }
+
+    fn at<'a>(&self, grid: &'a [Vec<char>]) -> Option<&'a char> {
+        grid.get(self.y()).and_then(|row| row.get(self.x()))
+    }
+
+    fn char_at<'a>(&self, grid: &'a [Vec<char>]) -> &'a char {
+        self.at(grid).unwrap_or(&'.')
+    }
+}
+
+enum Dir {
+    Up,
+    Down,
+    Right,
+    Left,
+}
+
+impl Dir {
+    fn x(&self) -> isize {
+        match self {
+            Dir::Up => 0,
+            Dir::Down => 0,
+            Dir::Left => -1,
+            Dir::Right => 1,
+        }
+    }
+
+    fn y(&self) -> isize {
+        match self {
+            Dir::Up => -1,
+            Dir::Down => 1,
+            Dir::Left => 0,
+            Dir::Right => 0,
+        }
+    }
+}
+
+fn parse(input: &str) -> (Vec<Vec<char>>, Pos) {
     let map: Vec<Vec<char>> = input.lines().map(|l| l.chars().collect()).collect();
 
     let len = map.get(0).unwrap().len() + 1;
@@ -12,110 +102,60 @@ fn parse(input: &str) -> (Vec<Vec<char>>, (usize, usize)) {
     let y = i / len;
     let x = i % len;
 
-    (map, (x, y))
+    (map, Pos::new(x, y))
 }
 
-fn determine_s(map: &Vec<Vec<char>>, pos_s: (usize, usize)) -> char {
-    let up = *map
-        .get(pos_s.1.wrapping_sub(1))
-        .and_then(|row| row.get(pos_s.0))
-        .unwrap_or(&'.');
-    let down = *map
-        .get(pos_s.1.wrapping_add(1))
-        .and_then(|row| row.get(pos_s.0))
-        .unwrap_or(&'.');
-    let right = *map
-        .get(pos_s.1)
-        .and_then(|row| row.get(pos_s.0.wrapping_add(1)))
-        .unwrap_or(&'.');
-    let left = *map
-        .get(pos_s.1)
-        .and_then(|row| row.get(pos_s.0.wrapping_sub(1)))
-        .unwrap_or(&'.');
+fn determine_s(map: &[Vec<char>], pos_s: &Pos) -> char {
+    let mut possibilities = HashSet::from(['|', '-', 'L', 'J', 'F', '7']);
 
-    if "-LF".contains(left) && "-LF".contains(right) {
-        return '-';
-    } else if "|7F".contains(up) && "|7F".contains(down) {
-        return '|';
-    } else if "|LJ".contains(down) && "-J7".contains(right) {
-        return 'F';
-    } else if "|LJ".contains(down) && "-LF".contains(left) {
-        return '7';
-    } else if "|7F".contains(up) && "-J7".contains(right) {
-        return 'L';
-    } else if "|7F".contains(up) && "-LF".contains(left) {
-        return 'J';
+    let up = pos_s.next(&Dir::Up).and_then(|p| p.at(map)).unwrap_or(&'.');
+    if "-LJ.".contains(*up) {
+        possibilities.remove(&'|');
+        possibilities.remove(&'L');
+        possibilities.remove(&'J');
     }
-
-    return '.';
+    let down = pos_s
+        .next(&Dir::Down)
+        .and_then(|p| p.at(map))
+        .unwrap_or(&'.');
+    if "-F7.".contains(*down) {
+        possibilities.remove(&'|');
+        possibilities.remove(&'7');
+        possibilities.remove(&'F');
+    }
+    let right = pos_s
+        .next(&Dir::Right)
+        .and_then(|p| p.at(map))
+        .unwrap_or(&'.');
+    if "|LF.".contains(*right) {
+        possibilities.remove(&'-');
+        possibilities.remove(&'L');
+        possibilities.remove(&'F');
+    }
+    let left = pos_s
+        .next(&Dir::Left)
+        .and_then(|p| p.at(map))
+        .unwrap_or(&'.');
+    if "|7J.".contains(*left) {
+        possibilities.remove(&'-');
+        possibilities.remove(&'7');
+        possibilities.remove(&'J');
+    }
+    *possibilities.iter().next().unwrap()
 }
 
-fn next(map: &Vec<Vec<char>>, pos: (usize, usize)) -> Vec<(usize, usize)> {
-    let mut char = map
-        .get(pos.1)
-        .and_then(|row| row.get(pos.0))
-        .unwrap_or(&'.');
+fn shoelace(points: &[(i64, i64)]) -> i64 {
+    let n = points.len();
+    let mut area = 0;
 
-    if char == &'S' {
-        let up = *map
-            .get(pos.1.wrapping_sub(1))
-            .and_then(|row| row.get(pos.0))
-            .unwrap_or(&'.');
-        let down = *map
-            .get(pos.1.wrapping_add(1))
-            .and_then(|row| row.get(pos.0))
-            .unwrap_or(&'.');
-        let right = *map
-            .get(pos.1)
-            .and_then(|row| row.get(pos.0.wrapping_add(1)))
-            .unwrap_or(&'.');
-        let left = *map
-            .get(pos.1)
-            .and_then(|row| row.get(pos.0.wrapping_sub(1)))
-            .unwrap_or(&'.');
+    for i in 0..n {
+        let (x1, y1) = points[i];
+        let (x2, y2) = if i + 1 < n { points[i + 1] } else { points[0] };
 
-        if "-LF".contains(left) && "-LF".contains(right) {
-            char = &'-';
-        } else if "|7F".contains(up) && "|7F".contains(down) {
-            char = &'|';
-        } else if "|LJ".contains(down) && "-J7".contains(right) {
-            char = &'F';
-        } else if "|LJ".contains(down) && "-LF".contains(left) {
-            char = &'7';
-        } else if "|7F".contains(up) && "-J7".contains(right) {
-            char = &'L';
-        } else if "|7F".contains(up) && "-LF".contains(left) {
-            char = &'J';
-        }
+        area += (x1 * y2) - (y1 * x2);
     }
 
-    match *char {
-        '-' => vec![
-            (pos.0.wrapping_sub(1), pos.1),
-            (pos.0.wrapping_add(1), pos.1),
-        ],
-        '|' => vec![
-            (pos.0, pos.1.wrapping_sub(1)),
-            (pos.0, pos.1.wrapping_add(1)),
-        ],
-        'F' => vec![
-            (pos.0.wrapping_add(1), pos.1),
-            (pos.0, pos.1.wrapping_add(1)),
-        ],
-        '7' => vec![
-            (pos.0.wrapping_sub(1), pos.1),
-            (pos.0, pos.1.wrapping_add(1)),
-        ],
-        'L' => vec![
-            (pos.0.wrapping_add(1), pos.1),
-            (pos.0, pos.1.wrapping_sub(1)),
-        ],
-        'J' => vec![
-            (pos.0.wrapping_sub(1), pos.1),
-            (pos.0, pos.1.wrapping_sub(1)),
-        ],
-        _ => vec![],
-    }
+    area.abs() / 2
 }
 
 impl AdventDay for Day10 {
@@ -126,107 +166,48 @@ impl AdventDay for Day10 {
     fn part1(&self, input: &str) -> SolutionOutput {
         let (mut map, start) = parse(input);
 
-        let s_char = determine_s(&map, start);
-        map[start.1][start.0] = s_char;
+        let s_char = determine_s(&map, &start);
+        map[start.y()][start.x()] = s_char;
 
-        let mut q: VecDeque<(usize, usize)> = VecDeque::new();
-        let mut distances: HashMap<(usize, usize), i64> = HashMap::new();
-        let mut visited: HashSet<(usize, usize)> = HashSet::new();
-        let mut max = 0;
-        q.push_back(start);
-        distances.insert(start, 0);
-        visited.insert(start);
+        let mut cur = start.nexts(&map)[0];
+        let mut previous: Pos = start;
+        let mut visited: HashSet<Pos> = HashSet::from([start]);
 
-        while !q.is_empty() {
-            let cur = q.pop_front().unwrap();
-            let d = *distances.get(&cur).unwrap();
-            let ns = next(&map, cur);
+        while cur != start {
+            visited.insert(cur);
+            let ns = cur.nexts(&map);
+            let next = ns.iter().find(|&&pos| pos != previous).unwrap();
 
-            for n in ns {
-                if visited.contains(&n)
-                    || map.get(n.1).and_then(|row| row.get(n.0)).unwrap_or(&'.') == &'.'
-                {
-                    continue;
-                }
-
-                let nd = d + 1;
-                if nd > max {
-                    max = nd;
-                }
-
-                q.push_back(n);
-                distances.insert(n, nd);
-                visited.insert(n);
-            }
+            previous = cur;
+            cur = *next;
         }
 
-        SolutionOutput::Int(max)
+        SolutionOutput::Int(visited.len() as i64 / 2)
     }
 
     fn part2(&self, input: &str) -> SolutionOutput {
         let (mut map, start) = parse(input);
 
-        let s_char = determine_s(&map, start);
-        map[start.1][start.0] = s_char;
+        let s_char = determine_s(&map, &start);
+        map[start.y()][start.x()] = s_char;
 
-        let mut q: VecDeque<(usize, usize)> = VecDeque::new();
-        let mut distances: HashMap<(usize, usize), i64> = HashMap::new();
-        let mut visited: HashSet<(usize, usize)> = HashSet::new();
-        let mut max = 0;
-        q.push_back(start);
-        distances.insert(start, 0);
-        visited.insert(start);
+        let mut cur = start.nexts(&map)[0];
+        let mut previous: Pos = start;
+        let mut seen: Vec<(i64, i64)> = vec![start.val()];
+        let mut visited: HashSet<Pos> = HashSet::from([start]);
 
-        while !q.is_empty() {
-            let cur = q.pop_front().unwrap();
-            let d = *distances.get(&cur).unwrap();
-            let ns = next(&map, cur);
+        while cur != start {
+            visited.insert(cur);
+            seen.push(cur.val());
+            let ns = cur.nexts(&map);
+            let next = ns.iter().find(|&&pos| pos != previous).unwrap();
 
-            for n in ns {
-                if visited.contains(&n)
-                    || map.get(n.1).and_then(|row| row.get(n.0)).unwrap_or(&'.') == &'.'
-                {
-                    continue;
-                }
-
-                let nd = d + 1;
-                if nd > max {
-                    max = nd;
-                }
-
-                q.push_back(n);
-                distances.insert(n, nd);
-                visited.insert(n);
-            }
+            previous = cur;
+            cur = *next;
         }
 
-        let lp: Vec<Vec<char>> = map
-            .iter()
-            .enumerate()
-            .map(|(y, row)| {
-                row.iter()
-                    .enumerate()
-                    .map(|(x, c)| if visited.contains(&(x, y)) { *c } else { '.' })
-                    .collect()
-            })
-            .collect();
-
-        let mut res = 0;
-
-        for (y, row) in lp.iter().enumerate() {
-            let mut num_intersections = 0;
-
-            for (x, ch) in row.iter().enumerate() {
-                match ch {
-                    '|' | 'J' | 'L' if visited.contains(&(x, y)) => {
-                        num_intersections += 1;
-                    }
-                    '.' if num_intersections % 2 == 1 => res += 1,
-                    _ => {}
-                }
-            }
-        }
-
+        let a = shoelace(&seen);
+        let res = a + 1 - seen.len() as i64 / 2;
         SolutionOutput::Int(res)
     }
 }
