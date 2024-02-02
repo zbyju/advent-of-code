@@ -60,16 +60,16 @@ I decided to take the opportunity and learn a new language (Python) while solvin
 
 # Languages for consideration
 
-- **Elixir**
+- Elixir
+- Kotlin
 - OCaml
-- Haskell
-- C++
 - Zig
+- Haskell
 
 ---
 
-- Closure
-- Kotlin
-- Swift
 - Nim
+- Closure
+- C++
+- Swift
 - Carbon
