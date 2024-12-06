@@ -11,6 +11,12 @@ import simplifile
 
 // Import all day solutions
 import solutions/day00.{day00_solution}
+import solutions/day01.{day01_solution}
+import solutions/day02.{day02_solution}
+import solutions/day03.{day03_solution}
+import solutions/day04.{day04_solution}
+import solutions/day05.{day05_solution}
+import solutions/day06.{day06_solution}
 
 // Add more day solutions as they are created
 
@@ -19,7 +25,15 @@ pub type DaySolution {
 }
 
 pub fn get_solutions() -> List(DaySolution) {
-  [DaySolution(0, day00_solution())]
+  [
+    DaySolution(0, day00_solution()),
+    DaySolution(1, day01_solution()),
+    DaySolution(2, day02_solution()),
+    DaySolution(3, day03_solution()),
+    DaySolution(4, day04_solution()),
+    DaySolution(5, day05_solution()),
+    DaySolution(6, day06_solution()),
+  ]
 }
 
 pub fn run_solution(
