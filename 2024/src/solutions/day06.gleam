@@ -1,5 +1,4 @@
 import aoc_solution.{type Solution, type SolutionResult, IntResult, Solution}
-import gleam/io
 import gleam/iterator
 import gleam/list
 import gleam/result

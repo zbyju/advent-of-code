@@ -1,5 +1,4 @@
 import aoc_solution.{type Solution, type SolutionResult, IntResult, Solution}
-import gleam/io
 import gleam/iterator
 import gleam/list
 import gleam/option.{type Option, None, Some}
@@ -109,19 +108,6 @@ fn count(grid: Array(Array(Letter))) -> Int {
           let down_right = check_xmas_in_dir(grid, M, x, y, 1, 1)
           let down_left = check_xmas_in_dir(grid, M, x, y, -1, 1)
           let up_left = check_xmas_in_dir(grid, M, x, y, -1, -1)
-
-          io.debug(x)
-          io.debug(y)
-          io.debug(
-            up
-            + down
-            + right
-            + left
-            + up_right
-            + down_right
-            + down_left
-            + up_left,
-          )
 
           acc
           + up
