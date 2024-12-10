@@ -42,6 +42,10 @@ Link to the contest: https://adventofcode.com/
 |   24    |                          |                                             |                |           ⭐⭐           |                          |                      |
 |   25    |                          |                                             |                |           ⭐⭐           |                          |                      |
 
+## Year 2024
+
+I want to revisit my love for functional programming using an exciting new language Gleam!
+
 ## Year 2023
 
 I wanted to get into Rust for a while, finally gonna try it out for a bit.
@@ -60,16 +64,15 @@ I decided to take the opportunity and learn a new language (Python) while solvin
 
 # Languages for consideration
 
-- Elixir
-- Kotlin
-- OCaml
+- Closure
 - Zig
+- OCaml
 - Haskell
+- Elixir
 
 ---
 
 - Nim
-- Closure
-- C++
 - Swift
-- Carbon
+- C++
+- Kotlin
