@@ -24,6 +24,7 @@ import solutions/day07.{day07_solution}
 import solutions/day08.{day08_solution}
 import solutions/day09.{day09_solution}
 import solutions/day10.{day10_solution}
+import solutions/day11.{day11_solution}
 
 type DaySolution {
   DaySolution(solution: Solution)
@@ -42,6 +43,7 @@ fn get_solutions() -> List(DaySolution) {
     DaySolution(day08_solution()),
     DaySolution(day09_solution()),
     DaySolution(day10_solution()),
+    DaySolution(day11_solution()),
   ]
 }
 
