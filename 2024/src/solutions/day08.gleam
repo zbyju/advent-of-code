@@ -1,5 +1,4 @@
 import aoc_solution.{type Solution, type SolutionResult, IntResult, Solution}
-import gleam/io
 import gleam/list
 import gleam/result
 import gleam/set
@@ -96,8 +95,6 @@ fn create_antennas(
 ) -> List(Antenna) {
   let created = create_antenna2(antenna, difference)
 
-  io.debug(#(antenna, difference, created))
-
   case is_within_bounds(max_coords, created) {
     True -> {
       let next_acc = list.append(acc, [created])
@@ -113,7 +110,7 @@ pub fn day08_solution() -> Solution {
       let #(antennas, max_coords) = parse_input(input)
 
       let result =
-        dict.fold(antennas, set.new(), fn(acc, freq, antennas) {
+        dict.fold(antennas, set.new(), fn(acc, _, antennas) {
           let combinations = list.combination_pairs(antennas)
 
           list.fold(combinations, acc, fn(acc, pair) {
@@ -142,7 +139,7 @@ pub fn day08_solution() -> Solution {
       let #(antennas, max_coords) = parse_input(input)
 
       let result =
-        dict.fold(antennas, set.new(), fn(acc, freq, antennas) {
+        dict.fold(antennas, set.new(), fn(acc, _, antennas) {
           let combinations = list.combination_pairs(antennas)
 
           list.fold(combinations, acc, fn(acc, pair) {
@@ -151,8 +148,6 @@ pub fn day08_solution() -> Solution {
             let n1 = create_antennas(max_coords, a1, get_difference(a1, a2), [])
             let n2 = create_antennas(max_coords, a2, get_difference(a2, a1), [])
             let new_nodes = list.append(n1, n2)
-
-            io.debug(#(freq, a1, a2, n1, n2, new_nodes))
 
             set.from_list(new_nodes)
             |> set.union(acc)

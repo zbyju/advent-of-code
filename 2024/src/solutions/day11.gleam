@@ -1,7 +1,6 @@
 import aoc_solution.{type Solution, type SolutionResult, IntResult, Solution}
 import gleam/dict.{type Dict}
 import gleam/int
-import gleam/io
 import gleam/list
 import gleam/result
 import gleam/string

@@ -1,6 +1,4 @@
-import aoc_solution.{
-  type Solution, type SolutionResult, IntResult, Solution, StringResult,
-}
+import aoc_solution.{type Solution, type SolutionResult, IntResult, Solution}
 import gleam/int
 import gleam/list
 import gleam/option.{None, Some}
