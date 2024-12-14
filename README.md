@@ -72,6 +72,7 @@ I decided to take the opportunity and learn a new language (Python) while solvin
 
 ---
 
+- Roc
 - Nim
 - Swift
 - C++
